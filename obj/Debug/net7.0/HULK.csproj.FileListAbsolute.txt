@@ -1,0 +1,15 @@
+/home/glenda/HULK/bin/Debug/net7.0/HULK
+/home/glenda/HULK/bin/Debug/net7.0/HULK.deps.json
+/home/glenda/HULK/bin/Debug/net7.0/HULK.runtimeconfig.json
+/home/glenda/HULK/bin/Debug/net7.0/HULK.dll
+/home/glenda/HULK/bin/Debug/net7.0/HULK.pdb
+/home/glenda/HULK/obj/Debug/net7.0/HULK.csproj.AssemblyReference.cache
+/home/glenda/HULK/obj/Debug/net7.0/HULK.GeneratedMSBuildEditorConfig.editorconfig
+/home/glenda/HULK/obj/Debug/net7.0/HULK.AssemblyInfoInputs.cache
+/home/glenda/HULK/obj/Debug/net7.0/HULK.AssemblyInfo.cs
+/home/glenda/HULK/obj/Debug/net7.0/HULK.csproj.CoreCompileInputs.cache
+/home/glenda/HULK/obj/Debug/net7.0/HULK.dll
+/home/glenda/HULK/obj/Debug/net7.0/refint/HULK.dll
+/home/glenda/HULK/obj/Debug/net7.0/HULK.pdb
+/home/glenda/HULK/obj/Debug/net7.0/HULK.genruntimeconfig.cache
+/home/glenda/HULK/obj/Debug/net7.0/ref/HULK.dll
