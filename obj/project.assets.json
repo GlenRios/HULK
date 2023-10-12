@@ -8,19 +8,19 @@
     "net7.0": []
   },
   "packageFolders": {
-    "/home/glenda/.nuget/packages/": {}
+    "C:\\Users\\Glenda\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/glenda/HULK/HULK.csproj",
+      "projectUniqueName": "C:\\Users\\Glenda\\Desktop\\HULK\\HULK\\HULK.csproj",
       "projectName": "HULK",
-      "projectPath": "/home/glenda/HULK/HULK.csproj",
-      "packagesPath": "/home/glenda/.nuget/packages/",
-      "outputPath": "/home/glenda/HULK/obj/",
+      "projectPath": "C:\\Users\\Glenda\\Desktop\\HULK\\HULK\\HULK.csproj",
+      "packagesPath": "C:\\Users\\Glenda\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Glenda\\Desktop\\HULK\\HULK\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/glenda/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Glenda\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -59,7 +59,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.111/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

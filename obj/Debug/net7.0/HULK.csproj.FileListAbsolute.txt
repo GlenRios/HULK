@@ -13,3 +13,17 @@
 /home/glenda/HULK/obj/Debug/net7.0/HULK.pdb
 /home/glenda/HULK/obj/Debug/net7.0/HULK.genruntimeconfig.cache
 /home/glenda/HULK/obj/Debug/net7.0/ref/HULK.dll
+C:\Users\Glenda\Desktop\HULK\HULK\bin\Debug\net7.0\HULK.exe
+C:\Users\Glenda\Desktop\HULK\HULK\bin\Debug\net7.0\HULK.deps.json
+C:\Users\Glenda\Desktop\HULK\HULK\bin\Debug\net7.0\HULK.runtimeconfig.json
+C:\Users\Glenda\Desktop\HULK\HULK\bin\Debug\net7.0\HULK.dll
+C:\Users\Glenda\Desktop\HULK\HULK\bin\Debug\net7.0\HULK.pdb
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\HULK.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\HULK.AssemblyInfoInputs.cache
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\HULK.AssemblyInfo.cs
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\HULK.csproj.CoreCompileInputs.cache
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\HULK.dll
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\refint\HULK.dll
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\HULK.pdb
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\HULK.genruntimeconfig.cache
+C:\Users\Glenda\Desktop\HULK\HULK\obj\Debug\net7.0\ref\HULK.dll

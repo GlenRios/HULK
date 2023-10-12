@@ -1,11 +1,16 @@
+
 namespace HULK;
 
 public class Tokenizador
 {
     public List<Token> Tokens;
+    public List<ERROR> errores;
     public Tokenizador(string input)
     {
         Tokens = new List<Token>();
+        
+        errores = new List<ERROR>();
+        
         MakeTokens(input);
     }
 
@@ -105,7 +110,8 @@ public class Tokenizador
 
                 else
                 {
-                    System.Console.WriteLine("Error en la posicion" + " " + i + 1 + " " + "Se esperaba'|'");
+                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, x[i] + " is not a valid token");
+                    errores.Add(error);
                     continue;
                 }
             }
@@ -121,7 +127,7 @@ public class Tokenizador
 
                 else
                 {
-                    System.Console.WriteLine("Error en la posicion" + " " + +i + 1 + "se esperaba un '&'");
+                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, x[i] + " is not a valid token");
                     continue;
                 }
             }
@@ -150,7 +156,7 @@ public class Tokenizador
                     i++;
                     continue;
                 }
-                
+
                 else
                 {
                     Tokens.Add(new Token(TokenType.Menor, "Comparacion", ""));
@@ -186,34 +192,27 @@ public class Tokenizador
                 string a = "";
                 for (int j = i + 1; j < x.Length; j++)
                 {
-                    if (j != x.Length - 1)
+
+                    if (x[j] == '"')
                     {
-                        if (x[j] == '"')
-                        {
-                            i = j;
-                            break;
-                        }
-
-                        else
-                        {
-                            a += x[j];
-                        }
-
-                        continue;
+                        i = j;
+                        break;
                     }
 
                     else
                     {
-                        if (x[j] == '"')
-
-                            System.Console.WriteLine("Se esperaba ';' en la posicion" + " " + (j + 1));
-                        
-                        else
-                        {
-                            System.Console.WriteLine("No se inicializo correctamente el string");
-                        }
+                        a += x[j];
                     }
+
+                    if (j == x.Length - 1 && x[j] != '"')
+                    {
+                        ERROR error = new ERROR(ERROR.ErrorType.LexicalError, "String " + a + " was declared incorrectly");
+                        errores.Add(error);
+                    }
+
+                    continue;
                 }
+
                 Tokens.Add(new Token(TokenType.String, "Variables", a));
             }
 
@@ -222,7 +221,8 @@ public class Tokenizador
                 string numero = "";
                 numero = numero + x[i];
                 int ContadorDePuntos = 0;
-                
+                bool valido = true;
+
                 for (int j = i + 1; j < x.Length; j++)
                 {
 
@@ -235,21 +235,47 @@ public class Tokenizador
 
                     if (x[j] == '.')
                     {
-                        if (ContadorDePuntos < 1)
+                        numero += x[j];
+                        i = j;
+                        ContadorDePuntos++;
+                        continue;
+                    }
+
+                    if (x[j] == 'i')
+                    {
+                        if (x[j + 1] == 'n')
                         {
-                            numero += x[j];
-                            ContadorDePuntos++;
                             i = j;
-                            continue;
+                            break;
                         }
 
-                        else
-                        {
-                            System.Console.WriteLine("No es valido el '.' en la posicion" + " " + (j + 1));
-                            continue;
-                        }
+                        numero += x[j];
+                        valido = false;
                     }
+
+                    if (x[j] == '_' || x[j] == 'A' || x[j] == 'a' || x[j] == 'B' || x[j] == 'b' || x[j] == 'C' || x[j] == 'c' || x[j] == 'D' || x[j] == 'd' || x[j] == 'E' || x[j] == 'e' || x[j] == 'F' || x[j] == 'f' || x[j] == 'G' || x[j] == 'g' || x[j] == 'H' || x[j] == 'h' || x[j] == 'I' || x[j] == 'J' || x[j] == 'j' || x[j] == 'K' || x[j] == 'k' || x[j] == 'L' || x[j] == 'l' || x[j] == 'M' || x[j] == 'm' || x[j] == 'N' || x[j] == 'n' || x[j] == 'O' || x[j] == 'o' || x[j] == 'P' || x[j] == 'p' || x[j] == 'Q' || x[j] == 'q' || x[j] == 'R' || x[j] == 'r' || x[j] == 'S' || x[j] == 's' || x[j] == 'T' || x[j] == 't' || x[j] == 'U' || x[j] == 'u' || x[j] == 'V' || x[j] == 'v' || x[j] == 'W' || x[j] == 'W' || x[j] == 'X' || x[j] == 'x' || x[j] == 'Y' || x[j] == 'y' || x[j] == 'Z' || x[j] == 'z')
+                    {
+                        valido = false;
+                        numero += x[j];
+                        i = j;
+                        continue;
+                    }
+
                     break;
+                }
+
+                if (valido == false)
+                {
+                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, numero + " is not a valid token");
+                    errores.Add(error);
+                    continue;
+                }
+
+                if (ContadorDePuntos > 1)
+                {
+                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, "Number " + numero + " was declared incorrectly");
+                    errores.Add(error);
+                    continue;
                 }
 
                 Tokens.Add(new Token(TokenType.Number, "Variables", double.Parse(numero)));
@@ -260,15 +286,10 @@ public class Tokenizador
             {
                 string a = "";
                 a = a + x[i];
-                
+
                 for (int j = i + 1; j < x.Length; j++)
                 {
-                    if (j == x.Length - 1 && x[j] != ';')
-                    {
-                        System.Console.WriteLine("Se esperaba ';' en la posicion" + " " + (j + 1));
-                    }
-
-                    if (x[j] == '_' || x[j] == 'A' || x[j] == 'a' || x[j] == 'B' || x[j] == 'b' || x[j] == 'C' || x[j] == 'c' || x[j] == 'D' || x[j] == 'd' || x[j] == 'E' || x[j] == 'e' || x[j] == 'F' || x[j] == 'f' || x[j] == 'G' || x[j] == 'g' || x[j] == 'H' || x[j] == 'h' || x[j] == 'I' || x[j] == 'i' || x[j] == 'J' || x[j] == 'j' || x[j] == 'K' || x[j] == 'k' || x[j] == 'L' || x[j] == 'l' || x[j] == 'M' || x[j] == 'm' || x[j] == 'N' || x[j] == 'n' || x[j] == 'O' || x[j] == 'o' || x[j] == 'P' || x[j] == 'p' || x[j] == 'Q' || x[j] == 'q' || x[j] == 'R' || x[j] == 'r' || x[j] == 'S' || x[j] == 's' || x[j] == 'T' || x[j] == 't' || x[j] == 'U' || x[j] == 'u' || x[j] == 'V' || x[j] == 'v' || x[j] == 'W' || x[j] == 'W' || x[j] == 'X' || x[j] == 'x' || x[j] == 'Y' || x[j] == 'y' || x[j] == 'Z' || x[j] == 'z')
+                    if (x[j] == '_' || x[j] == 'A' || x[j] == 'a' || x[j] == 'B' || x[j] == 'b' || x[j] == 'C' || x[j] == 'c' || x[j] == 'D' || x[j] == 'd' || x[j] == 'E' || x[j] == 'e' || x[j] == 'F' || x[j] == 'f' || x[j] == 'G' || x[j] == 'g' || x[j] == 'H' || x[j] == 'h' || x[j] == 'I' || x[j] == 'i' || x[j] == 'J' || x[j] == 'j' || x[j] == 'K' || x[j] == 'k' || x[j] == 'L' || x[j] == 'l' || x[j] == 'M' || x[j] == 'm' || x[j] == 'N' || x[j] == 'n' || x[j] == 'O' || x[j] == 'o' || x[j] == 'P' || x[j] == 'p' || x[j] == 'Q' || x[j] == 'q' || x[j] == 'R' || x[j] == 'r' || x[j] == 'S' || x[j] == 's' || x[j] == 'T' || x[j] == 't' || x[j] == 'U' || x[j] == 'u' || x[j] == 'V' || x[j] == 'v' || x[j] == 'W' || x[j] == 'W' || x[j] == 'X' || x[j] == 'x' || x[j] == 'Y' || x[j] == 'y' || x[j] == 'Z' || x[j] == 'z' || x[j] == '0' || x[j] == '1' || x[j] == '2' || x[j] == '3' || x[j] == '4' || x[j] == '5' || x[j] == '6' || x[j] == '7' || x[j] == '8' || x[j] == '9')
                     {
                         a += x[j];
                         i = j;
@@ -335,8 +356,10 @@ public class Tokenizador
                 Tokens.Add(new Token(TokenType.Identificador, "Variable", a));
                 continue;
             }
+
+            errores.Add(new ERROR(ERROR.ErrorType.LexicalError, x[i] + " is not a valid token"));
         }
 
-        Tokens.Add(new Token(TokenType.Final,"",""));
+        Tokens.Add(new Token(TokenType.Final, "", ""));
     }
 }
