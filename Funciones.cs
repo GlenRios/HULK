@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace HULK;
 public class Funciones
 {
@@ -32,6 +34,11 @@ public class Funciones
     {
         Expresion.Funcion funcion=new Expresion.Funcion();
         funciones.Add(name, funcion);
+    }
+
+    public static void Borrar(string name)
+    {
+        funciones.Remove(name);
     }
     
     public static void FuncionesEspeciales()

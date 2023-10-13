@@ -1,3 +1,6 @@
+using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.VisualBasic.FileIO;
+
 namespace HULK;
 public class Parser
 {
@@ -72,7 +75,7 @@ public class Parser
     //Metodo para parsear una lista de tokens
     public Expresion Parse()
     {
-        while (match(TokenType.function))
+        if (match(TokenType.function))
         {
             current++;
 
@@ -82,7 +85,7 @@ public class Parser
 
             if (Funciones.ContainsFuncion(name))
             {
-                errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "function " + name + " cannot be redefined"));
+                throw new Exception("functions cannot be redefined");
             }
 
             consume(TokenType.ParentesisAbierto, "Expected '(' after expression " + previous().Type + " " + previous().Value);
@@ -106,19 +109,18 @@ public class Parser
             Funciones.nullfunctions(name);
 
             Expresion funcionCuerpo = expression();
-            // if (match(TokenType.PuntoYComa))
 
             consume(TokenType.PuntoYComa, "Expected ';' at the end of expression declaration after " + previous().Type + " " + previous().Value);
 
+            Funciones.Borrar(name);
+
             Expresion expres = new Expresion.Funcion(name, argument, funcionCuerpo);
 
-            if (match(TokenType.Final))
-                return expres;
+            Funciones.funciones.Add(name, new Expresion.Funcion(name, argument, funcionCuerpo));
 
-            errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "Expression was not declared correctly after " + previous().Type + " " + previous().Value));
-
-            return null!;
+            return expres;
         }
+
         Expresion expr = expression();
 
         consume(TokenType.PuntoYComa, "Expected ';' at the end of expression declaration after " + previous().Type + " " + previous().Value);
@@ -130,8 +132,8 @@ public class Parser
         else
             errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "Expression was not declared correctly after " + previous().Type + " " + previous().Value));
 
-
         return null!;
+        //throw new Exception("Error");
     }
     private Expresion expression()
     {
@@ -347,9 +349,7 @@ public class Parser
 
                 consume(TokenType.ParentesisCerrado, "Missing ')' after expression " + previous().Type + " " + previous().Value);
 
-                Expresion.Funcion funcion = Funciones.GetFuncion(name);
-
-                return new Expresion.ExprLLamadaFuncion(name, argument, funcion);
+                return new Expresion.ExprLLamadaFuncion(name, argument, Funciones.GetFuncion(name));
             }
 
             Expresion.ExprVariable expr = new Expresion.ExprVariable(advance());
@@ -366,17 +366,32 @@ public class Parser
 
         while (!match(TokenType.In))
         {
-            Token nombre = advance();
+            Token name = new Token(TokenType.Identificador, "", "");
 
-            consume(TokenType.Igual, "Expected '=' before expression" + peek().Type + " " + peek().Value + " in the let-in declaration");
+            if (match(TokenType.Identificador))
+            {
+                name = advance();
+            }
 
+            else
+            {
+                errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "Expect a variable name after " + previous().Type + " " + previous().Value));
+            }
+
+            consume(TokenType.Igual, "Expect '=' after variable name");
             Expresion expr = expression();
 
             if (!match(TokenType.In))
+            {
+                consume(TokenType.Coma, "Expect ',' after expression " + previous().Type + " " + previous().Value);
 
-                consume(TokenType.Coma, "Expected ',' before expression " + peek().Type + " " + peek().Value);
+                if (match(TokenType.In))
+                {
+                    errores.Add(new ERROR(ERROR.ErrorType.LexicalError, "Invalid token 'in' after ','"));
+                }
 
-            answer.Add(new Expresion.ExprAsignar(nombre, expr));
+            }
+            answer.Add(new Expresion.ExprAsignar(name, expr));
         }
 
         return answer;
@@ -429,7 +444,7 @@ public class Parser
 
             return expr;
         }
-        if(match(TokenType.Final)) return null!;
+        if (match(TokenType.Final)) return null!;
         errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "Invalid syntax in " + peek().Type + " " + peek().Value));
         return null!;
     }

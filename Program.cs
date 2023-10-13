@@ -39,14 +39,17 @@ class Program
 
       Expresion expresion = parser.Parse();
 
-      foreach (var error in parser.errores)
+      if (parser.errores.Count != 0)
       {
-        System.Console.WriteLine(error.Tipo + " " + error.Mensaje);
+        foreach (var error in parser.errores)
+        {
+          System.Console.WriteLine(error.Tipo + " " + error.Mensaje);
+        }
       }
       Dictionary<object, object> xd = new Dictionary<object, object>();
-      //Evaluador evaluador = new Evaluador(expresion);
-      //object respuesta = evaluador.Run(expresion, xd);
-      //System.Console.WriteLine(respuesta);
+      Evaluador evaluador = new Evaluador(expresion);
+      object respuesta = evaluador.Run(expresion, xd);
+      System.Console.WriteLine(respuesta);
     }
   }
 }
