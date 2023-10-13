@@ -307,33 +307,36 @@ public abstract class Expresion
             Argumento = argumento;
             this.funcion = funcion;
         }
-        public object VisitExprLlamada(ExprLLamadaFuncion call, Dictionary<object, object> valor)
+        public object VisitExprLlamada(Dictionary<object, object> valor)
         {
-            Funcion funcion = call.funcion;
+            List<object> valores = new List<object>();
 
-            string name = call.Identificador;
+            foreach (var args in Argumento)
+            {
+                valores.Add(Evaluador.GetValue(args, valor));
+            }
 
-            List<Expresion> argument = call.Argumento;
-
-            switch (name)
+            switch (Identificador)
             {
                 case "sen":
-                    return Sen(argument, valor);
+                    return Sen(Argumento, valor);
 
                 case "cos":
-                    return Cos(argument, valor);
+                    return Cos(Argumento, valor);
 
                 case "print":
-                    return Print(argument, valor);
+                    return Print(Argumento, valor);
 
                 case "log":
-                    return Log(argument, valor);
+                    return Log(Argumento, valor);
 
                 case "sqrt":
-                    return Sqrt(argument, valor);
+                    return Sqrt(Argumento, valor);
 
                 default:
-                    return VisitFuncion(call);
+                    Funcion funcion = Funciones.GetFuncion(Identificador).copy();
+
+                    return VisitFuncion(valores, funcion);
             }
         }
         public object Sen(List<Expresion> argument, Dictionary<object, object> valor)
@@ -342,6 +345,7 @@ public abstract class Expresion
             {
                 return Math.Sin((double)Evaluador.GetValue(argument[0], valor));
             }
+            
             throw new Exception("La funcion sen no admite mas de un argumento");
         }
         public object Cos(List<Expresion> argument, Dictionary<object, object> valor)
@@ -377,17 +381,36 @@ public abstract class Expresion
 
             throw new Exception("Una declaracion de print solo recibe un argumento");
         }
-        public object VisitFuncion(ExprLLamadaFuncion call)
+        public object VisitFuncion(List<object> valores, Funcion funcion)
         {
-            Dictionary<object, object> asig = Funcion.VisitarFuncion(call.Argumento, call.funcion.Parametros);
-            return Evaluador.GetValue(call.funcion.Cuerpo, asig);
+
+            List<object> param = funcion.Parametros;
+            if (param.Count == valores.Count)
+            {
+                int count = 0;
+
+                foreach (var parametro in param)
+                {
+                    funcion.value[parametro] = valores[count];
+                    count++;
+                }
+                
+                return Evaluador.GetValue(funcion.Cuerpo, funcion.value);
+            }
+            else
+            {
+                throw new Exception("error");
+
+            }
         }
+
     }
     public class Funcion : Expresion
     {
         public string Identificador;
         public List<object> Parametros;
         public Expresion Cuerpo;
+        public Dictionary<object, object> value = new Dictionary<object, object>();
         public Funcion(string identificador, List<object> parametros, Expresion cuerpo)
         {
             Identificador = identificador;
@@ -401,23 +424,19 @@ public abstract class Expresion
             Cuerpo = null!;
         }
 
-        public static Dictionary<object, object> VisitarFuncion(List<Expresion> argument, List<object> parametros)
+        public Funcion copy()
         {
-            if (argument.Count == parametros.Count)
+            Funcion funcion = new Funcion(Identificador, Parametros, Cuerpo);
+            
+            if (value != null)
             {
-                int count = 0;
-                Dictionary<object, object> ValorDeLosParametros = new Dictionary<object, object>();
-                foreach (var x in argument)
+                foreach (var key in value.Keys)
                 {
-                    object valor = Evaluador.GetValue(x, ValorDeLosParametros);
-                    ValorDeLosParametros.Add(parametros[count], valor);
-                    count++;
+                    funcion.value[key] = value[key];
                 }
-
-                return ValorDeLosParametros;
             }
 
-            throw new Exception("La cantidad de argumentos que recibe la funcion no es la dada");
+            return funcion;
         }
     }
     public class If : Expresion

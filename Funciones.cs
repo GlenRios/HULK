@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Numerics;
 
 namespace HULK;
@@ -30,10 +31,12 @@ public class Funciones
         throw new Exception("Error mango");
     }
     
-    public static void nullfunctions(string name)
+    public static void nullfunctions(string name, Expresion.Funcion funcion= null!)
     {
-        Expresion.Funcion funcion=new Expresion.Funcion();
-        funciones.Add(name, funcion);
+        if(funciones.ContainsKey(name))
+          funciones[name]=funcion;
+
+        else funciones.Add(name,funcion);
     }
 
     public static void Borrar(string name)

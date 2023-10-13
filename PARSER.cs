@@ -1,5 +1,5 @@
-using System.Runtime.Serialization.Formatters.Binary;
-using Microsoft.VisualBasic.FileIO;
+
+using System.Linq.Expressions;
 
 namespace HULK;
 public class Parser
@@ -8,10 +8,10 @@ public class Parser
     //Para llevar la posicion de la lista
     private int current = 0;
     public List<ERROR> errores = new List<ERROR>();
+
     public Parser(List<Token> tokens)
     {
         Tokens = tokens;
-        Parse();
     }
 
     // Retorna verdadero si los tokens que se insertan en la llamada coincide con el de la posicion en que vamos en la lista
@@ -24,71 +24,56 @@ public class Parser
                 return true;
             }
         }
-
         return false;
     }
-
     private bool match(TokenType type)
     {
         if (check(type))
         {
             return true;
         }
-
         else return false;
     }
     //Retorna verdadero si el TokenType que se le inserta es del mismo tipo del que estamos parados en la lista
-
     private bool check(TokenType type)
     {
         //if (IAE()) return false;
         return peek().Type == type;
     }
 
-    //Consume el token actual y lo devuelve aumentando el valor del current
-
+    //Consume el token actual y lo devuelve ademas aumenta el valor del current
     private Token advance()
     {
         if (!IAE()) current++;
-
         return previous();
     }
 
     //Retorna el Token en la posicion anterior
-
     private Token previous()
     {
         return Tokens[current - 1];
     }
     //Retorna verdadero si el Token es PuntoYComa , o sea que esta al final de la linea
-
     private bool IAE()
     {
         return peek().Type == TokenType.Final;
     }
     //Retorna el token en la posicion actual
-
     private Token peek()
     {
         return Tokens[current];
     }
-    //Metodo para parsear una lista de tokens
     public Expresion Parse()
     {
-        if (match(TokenType.function))
+        while (match(TokenType.function))
         {
             current++;
 
-            Token nombre = consume(TokenType.Identificador, "An identifier was expected as the function name");
+            Token nombre = consume(TokenType.Identificador, "Identifier was expected as the function name");
 
             string name = (string)nombre.Value;
 
-            if (Funciones.ContainsFuncion(name))
-            {
-                throw new Exception("functions cannot be redefined");
-            }
-
-            consume(TokenType.ParentesisAbierto, "Expected '(' after expression " + previous().Type + " " + previous().Value);
+            consume(TokenType.ParentesisAbierto, "Expected '(' after identifier " + previous().Value);
 
             List<object> argument = new List<object>();
 
@@ -98,42 +83,53 @@ public class Parser
 
                 if (!match(TokenType.ParentesisCerrado))
                 {
-                    consume(TokenType.Coma, "Expected ',' before expression " + peek().Type + " " + peek().Value);
+                    consume(TokenType.Coma, "Expected ',' after expression " + previous().Type + " " + previous().Value);
                 }
+
             }
 
-            consume(TokenType.ParentesisCerrado, "Missing ')' after expression " + previous().Type + " " + previous().Value);
+            consume(TokenType.ParentesisCerrado, "Missing ')' after the function arguments");
 
-            consume(TokenType.Flecha, "Expect '=>' to declare the function");
+            consume(TokenType.Flecha, "Expected '=>' in the function declaration");
+
+            if (Funciones.ContainsFuncion(name))
+            {
+                throw new Exception("Functions cannot be redefined");
+            }
 
             Funciones.nullfunctions(name);
 
             Expresion funcionCuerpo = expression();
 
-            consume(TokenType.PuntoYComa, "Expected ';' at the end of expression declaration after " + previous().Type + " " + previous().Value);
+            consume(TokenType.PuntoYComa, "Expected ';' at the end of the expression , after " + previous().Type + " " + previous().Value);
 
-            Funciones.Borrar(name);
+            Expresion.Funcion expres = new Expresion.Funcion(name, argument, funcionCuerpo);
 
-            Expresion expres = new Expresion.Funcion(name, argument, funcionCuerpo);
+            Funciones.nullfunctions(name, expres);
 
-            Funciones.funciones.Add(name, new Expresion.Funcion(name, argument, funcionCuerpo));
+            if (match(TokenType.Final))
+                return expres;
 
-            return expres;
+            else
+            {
+                errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "Invalid expression after ';' in " + current));
+                return null!;
+            }
+
         }
 
         Expresion expr = expression();
 
-        consume(TokenType.PuntoYComa, "Expected ';' at the end of expression declaration after " + previous().Type + " " + previous().Value);
+        consume(TokenType.PuntoYComa, "Expected ';' at the end of the expression , after " + previous().Type + " " + previous().Value);
 
         if (match(TokenType.Final))
 
             return expr;
 
         else
-            errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "Expression was not declared correctly after " + previous().Type + " " + previous().Value));
-
+            errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "Invalid espression after ';'"));
         return null!;
-        //throw new Exception("Error");
+
     }
     private Expresion expression()
     {
@@ -149,9 +145,7 @@ public class Parser
         while (match(a))
         {
             Token operador = advance();
-
             Expresion rigth = equality();
-
             expr = new Expresion.ExprBinaria(expr, operador, rigth);
         }
 
@@ -160,7 +154,6 @@ public class Parser
 
     private Expresion equality()
     {
-
         Expresion expr = comparison();
 
         TokenType[] a = { TokenType.IgualIgual, TokenType.NoIgual };
@@ -168,9 +161,7 @@ public class Parser
         while (match(a))
         {
             Token operador = advance();
-
             Expresion rigth = comparison();
-
             expr = new Expresion.ExprBinaria(expr, operador, rigth);
         }
 
@@ -186,9 +177,7 @@ public class Parser
         while (match(a))
         {
             Token operador = advance();
-
             Expresion rigth = concat();
-
             expr = new Expresion.ExprBinaria(expr, operador, rigth);
         }
 
@@ -202,14 +191,13 @@ public class Parser
         while (match(TokenType.Concatenar))
         {
             Token operador = advance();
-
             Expresion rigth = Term();
-
             expr = new Expresion.ExprBinaria(expr, operador, rigth);
         }
 
         return expr;
     }
+
     private Expresion Term()
     {
         Expresion expr = factor();
@@ -219,14 +207,13 @@ public class Parser
         while (match(a))
         {
             Token operador = advance();
-
             Expresion rigth = factor();
-
             expr = new Expresion.ExprBinaria(expr, operador, rigth);
         }
 
         return expr;
     }
+
     private Expresion factor()
     {
         Expresion expr = pow();
@@ -236,14 +223,13 @@ public class Parser
         while (match(a))
         {
             Token operador = advance();
-
             Expresion rigth = pow();
-
             expr = new Expresion.ExprBinaria(expr, operador, rigth);
         }
 
         return expr;
     }
+
     private Expresion pow()
     {
         Expresion expr = mod();
@@ -251,14 +237,13 @@ public class Parser
         while (match(TokenType.Pow))
         {
             Token operador = advance();
-
             Expresion rigth = mod();
-
             expr = new Expresion.ExprBinaria(expr, operador, rigth);
         }
 
         return expr;
     }
+
     private Expresion mod()
     {
         Expresion expr = unary();
@@ -266,9 +251,7 @@ public class Parser
         while (match(TokenType.Modulo))
         {
             Token operador = advance();
-
             Expresion rigth = unary();
-
             expr = new Expresion.ExprBinaria(expr, operador, rigth);
         }
 
@@ -282,26 +265,23 @@ public class Parser
         while (match(a))
         {
             Token operador = advance();
-
             Expresion rigth = unary();
-
             return new Expresion.ExprUnaria(operador, rigth);
         }
 
         return IFORLET();
     }
-
     private Expresion IFORLET()
     {
         if (match(TokenType.If))
         {
             current++;
-
+            //consume(TokenType.ParentesisAbierto, "Se esperaba ( despues de if.");
             Expresion condicion = primary();
-
+            //consume(TokenType.ParentesisCerrado, "Se esperaba ) despues de la condicion del if");
             Expresion ifcuerpo = expression();
 
-            consume(TokenType.Else, "Expect 'else' after if statement");
+            consume(TokenType.Else, "Expected else after if statement in " + current);
 
             Expresion elsecuerpo = expression();
 
@@ -316,7 +296,7 @@ public class Parser
 
             List<Expresion.ExprAsignar> letCuerpo = Asign();
 
-            consume(TokenType.In, "Expected 'in' after arguments in let-in statement");
+            consume(TokenType.In, "Expected 'in' after let statement in " + current);
 
             Expresion inCuerpo = expression();
 
@@ -329,7 +309,7 @@ public class Parser
             {
                 string name = (string)advance().Value;
 
-                consume(TokenType.ParentesisAbierto, "Expected '(' after expression " + previous().Type + " " + previous().Value);
+                consume(TokenType.ParentesisAbierto, "Expected '(' in " + current);
 
                 TokenType[] a = { TokenType.Coma, TokenType.ParentesisCerrado };
 
@@ -341,13 +321,12 @@ public class Parser
 
                     if (!match(TokenType.ParentesisCerrado))
                     {
-                        consume(TokenType.Coma, "Expected ',' before expression " + peek().Type + " " + peek().Value);
+                        consume(TokenType.Coma, "Expected ',' after expression " + previous().Type + " " + previous().Value + " " + current);
                     }
 
                     argument.Add(expresion);
                 }
-
-                consume(TokenType.ParentesisCerrado, "Missing ')' after expression " + previous().Type + " " + previous().Value);
+                consume(TokenType.ParentesisCerrado, "Missing ')' after expression in " + current);
 
                 return new Expresion.ExprLLamadaFuncion(name, argument, Funciones.GetFuncion(name));
             }
@@ -379,6 +358,7 @@ public class Parser
             }
 
             consume(TokenType.Igual, "Expect '=' after variable name");
+
             Expresion expr = expression();
 
             if (!match(TokenType.In))
@@ -391,6 +371,7 @@ public class Parser
                 }
 
             }
+
             answer.Add(new Expresion.ExprAsignar(name, expr));
         }
 
@@ -440,21 +421,19 @@ public class Parser
 
             Expresion expr = expression();
 
-            consume(TokenType.ParentesisCerrado, "Missing ) after expression " + previous().Type + " " + previous().Value);
+            consume(TokenType.ParentesisCerrado, "missing ')' after expresion in " + current);
 
             return expr;
         }
-        if (match(TokenType.Final)) return null!;
-        errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, "Invalid syntax in " + peek().Type + " " + peek().Value));
+
+        errores.Add(new ERROR(ERROR.ErrorType.LexicalError, "Invalid token " + peek().Type + " " + peek().Value));
+
         return null!;
     }
-
     private Token consume(TokenType type, string mensaje)
     {
         if (check(type)) return advance();
-
         errores.Add(new ERROR(ERROR.ErrorType.SyntaxError, mensaje));
-
         return null!;
     }
 

@@ -46,6 +46,7 @@ class Program
           System.Console.WriteLine(error.Tipo + " " + error.Mensaje);
         }
       }
+      
       Dictionary<object, object> xd = new Dictionary<object, object>();
       Evaluador evaluador = new Evaluador(expresion);
       object respuesta = evaluador.Run(expresion, xd);
