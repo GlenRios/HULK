@@ -71,7 +71,7 @@ Usted debe garantizar que su implementación permite este tipo de definiciones r
 Su intérprete de HULK será una aplicación de consola, donde el usuario puede introducir una expresión de HULK, presionar ENTER, e immediatamente se verá el resultado de evaluar expresión (si lo hubiere) Este es un ejemplo de una posible interacción:
 
 
-'''
+´´´
 > let x = 42 in print(x);
 42
 > function fib(n) => if (n > 1) fib(n-1) + fib(n-2) else 1;
@@ -81,7 +81,7 @@ Su intérprete de HULK será una aplicación de consola, donde el usuario puede 
 8
 > print(fib(6));
 21
-'''
+´´´
 
 
 Cada línea que comienza con > representa una entrada del usuario, e immediatamente después se imprime el resultado de evaluar esa expresión, si lo hubiere.
