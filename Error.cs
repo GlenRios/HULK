@@ -1,6 +1,9 @@
 
+using System.Data;
+using System.Net;
+
 namespace HULK;
-public class ERROR
+public class ERROR: Exception
 {
     public enum ErrorType
     {
@@ -18,4 +21,5 @@ public class ERROR
         Mensaje = mensaje;
     }
 
+    
 }

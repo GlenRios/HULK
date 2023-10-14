@@ -21,10 +21,11 @@ class Program
   public static void Run(string input)
   {
     Tokenizador tokens = new Tokenizador(input);
-    /*foreach (var token in tokens.Tokens)
+    foreach (var token in tokens.Tokens)
     {
       Console.WriteLine(token.Type + " " + token.Grupo + " " + token.Value);
-    }*/
+    }
+
     if (tokens.errores.Count != 0)
     {
       foreach (var error in tokens.errores)
@@ -39,18 +40,18 @@ class Program
 
       Expresion expresion = parser.Parse();
 
-      if (parser.errores.Count != 0)
-      {
-        foreach (var error in parser.errores)
-        {
-          System.Console.WriteLine(error.Tipo + " " + error.Mensaje);
-        }
-      }
+
+
+        Dictionary<object, object> xd = new Dictionary<object, object>();
+        Evaluador evaluador = new Evaluador(expresion);
+        object respuesta = evaluador.Run(expresion, xd);
+
+
+
+
+          System.Console.WriteLine(respuesta);
+        
       
-      Dictionary<object, object> xd = new Dictionary<object, object>();
-      Evaluador evaluador = new Evaluador(expresion);
-      object respuesta = evaluador.Run(expresion, xd);
-      System.Console.WriteLine(respuesta);
     }
   }
 }

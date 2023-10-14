@@ -101,7 +101,7 @@ public class Parser
 
             Expresion funcionCuerpo = expression();
 
-            consume(TokenType.PuntoYComa, "Expected ';' at the end of the expression , after " + previous().Type + " " + previous().Value);
+            consume(TokenType.PuntoYComa, "Expected ';' at the end of the expression after " + previous().Type + " " + previous().Value);
 
             Expresion.Funcion expres = new Expresion.Funcion(name, argument, funcionCuerpo);
 

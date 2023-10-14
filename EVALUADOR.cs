@@ -1,5 +1,3 @@
-using System.Diagnostics.Contracts;
-using System.Linq.Expressions;
 
 namespace HULK;
 public class Evaluador
@@ -13,6 +11,7 @@ public class Evaluador
     {
         return GetValue(expr, asign);
     }
+
     public static object GetValue(Expresion expr, Dictionary<object, object> asig)
     {
         if (expr is Expresion.ExprUnaria)
