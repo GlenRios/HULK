@@ -71,8 +71,7 @@ Usted debe garantizar que su implementación permite este tipo de definiciones r
 Su intérprete de HULK será una aplicación de consola, donde el usuario puede introducir una expresión de HULK, presionar ENTER, e immediatamente se verá el resultado de evaluar expresión (si lo hubiere) Este es un ejemplo de una posible interacción:
 
 
-'''
-
+'''ruby
        > let x = 42 in print(x);
        
        42
