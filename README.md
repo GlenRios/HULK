@@ -9,13 +9,13 @@ Todas las instrucciones en HULK terminan en ;. La instrucción más simple en HU
 
 '''
 
-print("Hello World");
+        print("Hello World");
 
 '''
 ## HULK además tiene EXPRESIONES ARITMÉTICAS:
 '''
 
-print((((1 + 2) ^ 3) * 4) / 5);
+        print((((1 + 2) ^ 3) * 4) / 5);
 
 '''
 
@@ -23,20 +23,20 @@ print((((1 + 2) ^ 3) * 4) / 5);
 
 '''
 
-print(sin(2 * PI) ^ 2 + cos(3 * PI / log(4, 64)));
+        print(sin(2 * PI) ^ 2 + cos(3 * PI / log(4, 64)));
 
 '''
 
 ## FUNCIONES
 En HULK existen las funciones inline.Un ejemplo de este tipo de funciones sería
 '''
-function tan(x) => sin(x) / cos(x);
+        function tan(x) => sin(x) / cos(x);
 '''
 
 Una vez definida una función, puede usarse en una expresión cualquiera:
 
 '''
-print(tan(PI/2));
+        print(tan(PI/2));
 '''
 
 El cuerpo de una función inline es una expresión cualquiera, que por supuesto puede incluir otras funciones y expresiones básicas, o cualquier combinación.
@@ -45,7 +45,7 @@ El cuerpo de una función inline es una expresión cualquiera, que por supuesto 
 En HULK es posible declarar variables usando la expresión let-in, que funciona de la siguiente forma:
 
 '''
-let x = PI/2 in print(tan(x));
+        let x = PI/2 in print(tan(x));
 '''
 
 En general, una expresión let-in consta de una o más declaraciones de variables, y un cuerpo, que puede ser cualquier expresión donde además se pueden utilizar las variables declaradas en el let. Fuera de una expresión let-in las variables dejan de existir.
@@ -53,14 +53,14 @@ En general, una expresión let-in consta de una o más declaraciones de variable
 Por ejemplo, con dos variables:
 
 '''
-let number = 42, text = "The meaning of life is" in print(text @ number);
+        let number = 42, text = "The meaning of life is" in print(text @ number);
 '''
 
 Que es equivalente a:
 
-'''
-let number = 42 in (let text = "The meaning of life is" in (print(text @ number)));
-'''
+        '''
+        let number = 42 in (let text = "The meaning of life is" in (print(text @ number)));
+        '''
 
 El valor de retorno de una expresión let-in es el valor de retorno del cuerpo, por lo que es posible hacer:
 
