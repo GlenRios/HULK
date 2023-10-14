@@ -48,6 +48,8 @@ class Program
 
       object respuesta = evaluador.Run(expresion, xd);
 
+      if(ERROR.hadError==true) return;
+
       System.Console.WriteLine(respuesta);
 
     }

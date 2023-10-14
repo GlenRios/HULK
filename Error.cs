@@ -1,6 +1,7 @@
 
 using System.Data;
 using System.Net;
+using System.Reflection.Metadata;
 
 namespace HULK;
 public class ERROR: Exception
@@ -21,13 +22,20 @@ public class ERROR: Exception
         Type=type;
         Mensaje=mensaje;
         hadError=true;
+        if(type==ErrorType.SyntaxError)
+        {
+            System.Console.WriteLine(type+ mensaje);
+        }
+
+        if(type==ErrorType.SemanticError)
+        {
+            System.Console.WriteLine(type+ mensaje);
+        }
     }
     public ERROR(string mensaje)
     {
         Mensaje = mensaje;
         hadError=true;
     }
-
-
-    
+   
 }

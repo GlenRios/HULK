@@ -38,11 +38,6 @@ public class Funciones
 
         else funciones.Add(name,funcion);
     }
-
-    public static void Borrar(string name)
-    {
-        funciones.Remove(name);
-    }
     
     public static void FuncionesEspeciales()
     {

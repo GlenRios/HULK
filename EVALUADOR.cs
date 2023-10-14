@@ -73,7 +73,7 @@ public class Evaluador
         {
             if (resp.ContainsKey(expresion.Nombre.Value))
             {
-                throw new Exception("Ya se le ha asignado un valor a" + expresion.Nombre.Value);
+                throw new ERROR("variable " + expresion.Nombre.Value+ " already has a value assigned");
             }
 
             else resp.Add(expresion.Nombre.Value, GetValue(expresion.Valor, resp));
