@@ -14,9 +14,7 @@ Todas las instrucciones en HULK terminan en ;. La instrucción más simple en HU
 '''
 ## HULK además tiene EXPRESIONES ARITMÉTICAS:
 '
-
         print((((1 + 2) ^ 3) * 4) / 5);
-
 '
 
 ## Y FUNCIONES MATEMÁTICAS básicas:
