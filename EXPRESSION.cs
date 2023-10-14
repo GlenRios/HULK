@@ -422,7 +422,7 @@ public abstract class Expresion
                     return Sqrt(valores);
 
                 default:
-                    Funcion funcion = Funciones.GetFuncion(Identificador).copy();
+                    Funcion funcion = Funciones.GetFuncion(Identificador);
 
                     return VisitFuncion(valores, funcion);
             }
@@ -519,16 +519,16 @@ public abstract class Expresion
 
         public object VisitFuncion(List<object> valores, Funcion funcion)
         {
+            Dictionary<object, object> value = new Dictionary<object, object>();
 
             if (funcion.Parametros.Count == valores.Count)
             {
-                int count = 0;
-                foreach (object name in funcion.Parametros)
+                for (int i = 0; i < valores.Count; i++)
                 {
-                    funcion.value[name] = valores[count++];
+                    value.Add(funcion.Parametros[i],valores[i]);
                 }
-
-                return Evaluador.GetValue(funcion.Cuerpo, funcion.value);
+                
+                return Evaluador.GetValue(funcion.Cuerpo,value);
             }
 
             else
@@ -544,34 +544,13 @@ public abstract class Expresion
         public string Identificador;
         public List<object> Parametros;
         public Expresion Cuerpo;
-        public Dictionary<object, object> value = new Dictionary<object, object>();
         public Funcion(string identificador, List<object> parametros, Expresion cuerpo)
         {
             Identificador = identificador;
             Parametros = parametros;
             Cuerpo = cuerpo;
         }
-        public Funcion()
-        {
-            Identificador = null!;
-            Parametros = null!;
-            Cuerpo = null!;
-        }
 
-        public Funcion copy()
-        {
-            Funcion funcion = new Funcion(Identificador, Parametros, Cuerpo);
-
-            if (value != null)
-            {
-                foreach (object key in value.Keys)
-                {
-                    funcion.value[key] = value[key];
-                }
-            }
-
-            return funcion;
-        }
     }
 
     public class If : Expresion
@@ -584,25 +563,6 @@ public abstract class Expresion
             Condicion = condicion;
             IfCuerpo = ifCuerpo;
             ElseCuerpo = elseCuerpo;
-        }
-        public object VisitExprIF(object condicion, object ifCuerpo, object elseCuerpo)
-        {
-            if (!(condicion is bool))
-            {
-                throw new ERROR(ERROR.ErrorType.SemanticError + " if condition must return a bool");
-            }
-
-            else
-            {
-                bool Condicion = (bool)condicion;
-                if (Condicion == true)
-                {
-                    return ifCuerpo;
-                }
-
-                else return elseCuerpo;
-            }
-
         }
     }
 

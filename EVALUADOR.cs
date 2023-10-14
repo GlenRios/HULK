@@ -35,7 +35,22 @@ public class Evaluador
         if (expr is Expresion.If)
         {
             Expresion.If If = (Expresion.If)expr;
-            return If.VisitExprIF(GetValue(If.Condicion, asig), GetValue(If.IfCuerpo, asig), GetValue(If.ElseCuerpo, asig));
+            object x= GetValue(If.Condicion,asig);
+            if(!(x is bool))
+            {
+                throw new ERROR(ERROR.ErrorType.SemanticError," if condition must return a bool");
+            }
+            
+            else 
+            {
+                if((bool)x==true)
+                {
+                    return GetValue(If.IfCuerpo,asig);
+                }
+                
+                else return GetValue(If.ElseCuerpo,asig);
+            }
+                        
         }
 
         if (expr is Expresion.LetIn)
@@ -53,7 +68,7 @@ public class Evaluador
 
         if (expr is Expresion.Funcion)
         {
-            return "la funcion ha sido declarada correctamente";
+            return "function has been declared correctly";
         }
 
         if (expr is Expresion.ExprLLamadaFuncion)
