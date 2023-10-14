@@ -72,15 +72,15 @@ Su intérprete de HULK será una aplicación de consola, donde el usuario puede 
 
 
 '''
-       > > let x = 42 in print(x);
-       > 42
-       > > function fib(n) => if (n > 1) fib(n-1) + fib(n-2) else 1;
-       > > fib(5);
-       > 13
-       > > let x = 3 in fib(x+1);
-       > 8
-       > > print(fib(6));
-       > 21
+       >> let x = 42 in print(x);
+       >42
+       >> function fib(n) => if (n > 1) fib(n-1) + fib(n-2) else 1;
+       >> fib(5);
+       >13
+       >> let x = 3 in fib(x+1);
+       >8
+       >> print(fib(6));
+       >21
 '''
 
 
