@@ -13,6 +13,7 @@ Todas las instrucciones en HULK terminan en ;. La instrucción más simple en HU
 '
 ## HULK además tiene EXPRESIONES ARITMÉTICAS:
 '
+     
       print((((1 + 2) ^ 3) * 4) / 5);
 
 '
@@ -85,7 +86,7 @@ Como if-else es una expresión, se puede usar dentro de otra expresión (al esti
 Dado que HULK tiene funciones compuestas, por definición tiene también soporte para recursión. Un ejemplo de una función recursiva en HULK es la siguiente:
 '
 
-function fib(n) => if (n > 1) fib(n-1) + fib(n-2) else 1;
+        function fib(n) => if (n > 1) fib(n-1) + fib(n-2) else 1;
 
 '
 Usted debe garantizar que su implementación permite este tipo de definiciones recursivas.
