@@ -12,14 +12,22 @@ public class ERROR: Exception
         SemanticError,
     }
 
-    public ErrorType Tipo;
     public string Mensaje;
+    public ErrorType Type;
+    public static bool hadError= false;
 
-    public ERROR(ErrorType tipo, string mensaje)
+    public ERROR(ErrorType type, string mensaje)
     {
-        Tipo = tipo;
-        Mensaje = mensaje;
+        Type=type;
+        Mensaje=mensaje;
+        hadError=true;
     }
+    public ERROR(string mensaje)
+    {
+        Mensaje = mensaje;
+        hadError=true;
+    }
+
 
     
 }

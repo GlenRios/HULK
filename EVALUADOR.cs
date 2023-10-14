@@ -59,7 +59,7 @@ public class Evaluador
         if (expr is Expresion.ExprLLamadaFuncion)
         {
             Expresion.ExprLLamadaFuncion call = (Expresion.ExprLLamadaFuncion)expr;
-            return call.VisitExprLlamada(asig);
+            return call.VisitExprLlamada(call, asig);
         }
 
         return null!;
