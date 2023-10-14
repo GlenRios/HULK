@@ -3,20 +3,20 @@
 El lenguaje HULK (simplificado)
 HULK es un lenguaje de programación imperativo, funcional, estática y fuertemente tipado. Casi todas las instrucciones en HULK son expresiones. En particular, el subconjunto de HULK que usted implementar se compone solamente de expresiones que pueden escribirse en una línea.
 
-EXPRESIONES BÁSICAS
+# EXPRESIONES BÁSICAS
 Todas las instrucciones en HULK terminan en ;. La instrucción más simple en HULK que hace algo es la siguiente:
 
 print("Hello World");
 
-HULK además tiene EXPRESIONES ARITMÉTICAS:
+# HULK además tiene EXPRESIONES ARITMÉTICAS:
 
 print((((1 + 2) ^ 3) * 4) / 5);
 
-Y FUNCIONES MATEMÁTICAS básicas:
+# Y FUNCIONES MATEMÁTICAS básicas:
 
 print(sin(2 * PI) ^ 2 + cos(3 * PI / log(4, 64)));
 
-FUNCIONES
+# FUNCIONES
 En HULK existen las funciones inline.Un ejemplo de este tipo de funciones sería
 
 function tan(x) => sin(x) / cos(x);
@@ -25,7 +25,7 @@ Una vez definida una función, puede usarse en una expresión cualquiera:
 print(tan(PI/2));
 El cuerpo de una función inline es una expresión cualquiera, que por supuesto puede incluir otras funciones y expresiones básicas, o cualquier combinación.
 
-VARIABLES
+# VARIABLES
 En HULK es posible declarar variables usando la expresión let-in, que funciona de la siguiente forma:
 
 let x = PI/2 in print(tan(x));
@@ -44,7 +44,7 @@ Que da como resultado 11.
 
 La expresión let-in permite hacer mucho más, pero para este proyecto usted solo necesita implementar las funcionalidades anteriores.
 
-CONDICIONALES
+# CONDICIONALES
 Las condiciones en HULK se implementan con la expresión if-else, que recibe una expresión booleana entre paréntesis, y dos expresiones para el cuerpo del if y el else respectivamente. Siempre deben incluirse ambas partes:
 
 let a = 42 in if (a % 2 == 0) print("Even") else print("odd");
@@ -52,13 +52,13 @@ Como if-else es una expresión, se puede usar dentro de otra expresión (al esti
 
 let a = 42 in print(if (a % 2 == 0) "even" else "odd");
 
-RECURSIÓN
+# RECURSIÓN
 Dado que HULK tiene funciones compuestas, por definición tiene también soporte para recursión. Un ejemplo de una función recursiva en HULK es la siguiente:
 
 function fib(n) => if (n > 1) fib(n-1) + fib(n-2) else 1;
 Usted debe garantizar que su implementación permite este tipo de definiciones recursivas.
 
-EL INTÉRPRETE
+# EL INTÉRPRETE
 Su intérprete de HULK será una aplicación de consola, donde el usuario puede introducir una expresión de HULK, presionar ENTER, e immediatamente se verá el resultado de evaluar expresión (si lo hubiere) Este es un ejemplo de una posible interacción:
 
 > let x = 42 in print(x);
@@ -76,5 +76,5 @@ Note que cuando una expresión tiene valor de retorno (como en el caso de un lla
 
 Todas las funciones declaradas anteriormente son visibles en cualquier expresión subsiguiente. Las funciones no pueden redefinirse
 
-ERRORES
+# ERRORES
  
