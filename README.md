@@ -14,13 +14,17 @@ print("Hello World");
 '''
 ## HULK además tiene EXPRESIONES ARITMÉTICAS:
 '''
+
 print((((1 + 2) ^ 3) * 4) / 5);
+
 '''
 
 ## Y FUNCIONES MATEMÁTICAS básicas:
 
 '''
+
 print(sin(2 * PI) ^ 2 + cos(3 * PI / log(4, 64)));
+
 '''
 
 ## FUNCIONES
