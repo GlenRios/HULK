@@ -28,7 +28,7 @@ public class Funciones
             if (funciones.ContainsKey(name))
                 return funciones[name];
         }
-        throw new ERROR(ERROR.ErrorType.SemanticError , "Function "+ name + " is not defined");
+        throw new ERROR(ERROR.ErrorType.SemanticError , " Function "+ name + " is not defined");
     }
     
     public static void nullfunctions(string name, Expresion.Funcion funcion= null!)

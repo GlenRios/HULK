@@ -273,7 +273,7 @@ public class Tokenizador
 
                 if (ContadorDePuntos > 1)
                 {
-                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, "Number " + numero + " was declared incorrectly");
+                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, " Number " + numero + " was declared incorrectly");
                     errores.Add(error);
                     continue;
                 }
@@ -357,7 +357,7 @@ public class Tokenizador
                 continue;
             }
 
-            errores.Add(new ERROR(ERROR.ErrorType.LexicalError, x[i] + " is not a valid token"));
+            errores.Add(new ERROR(ERROR.ErrorType.LexicalError," '"+ x[i] + "' is not a valid token"));
         }
 
         Tokens.Add(new Token(TokenType.Final, "", ""));
