@@ -1,4 +1,5 @@
-﻿using System.Runtime.Intrinsics.Arm;
+﻿using System.Net.NetworkInformation;
+using System.Runtime.Intrinsics.Arm;
 
 namespace HULK;
 class Program
@@ -9,18 +10,28 @@ class Program
     Funciones.FuncionesEspeciales();
     while (true)
     {
-      System.Console.Write(">");
-      
+      Console.Write(">");
+
       var input = Console.ReadLine();
-      if (input == null!)
+
+      if (input == null)
       {
-        Console.WriteLine("Se ha ingresado una linea vacia");
-        break;
+        Console.WriteLine("An empty line has been entered");
       }
 
-      else Run((string)input);
+      else
+      {
+        if (input.Length == 0)
+        {
+          Console.WriteLine("An empty line has been entered");
+        }
+        
+        else
+        {
+          Run(input);
+        }
+      }
     }
-
   }
   public static void Run(string input)
   {
@@ -46,16 +57,21 @@ class Program
 
       if (ERROR.hadError == true) return;
 
-      Dictionary<object, object> xd = new Dictionary<object, object>();
+      else
+      {
+        Dictionary<object, object> value = new Dictionary<object, object>();
 
-      Evaluador evaluador = new Evaluador(expresion);
+        Evaluador evaluador = new Evaluador(expresion);
 
-      object respuesta = evaluador.Run(expresion, xd);
+        object respuesta = evaluador.Run(expresion, value);
 
-      if(ERROR.hadError==true) return;
+        if (ERROR.hadError == true) return;
 
-      System.Console.WriteLine(respuesta);
-
+        else
+        {
+          Console.WriteLine(respuesta);
+        }
+      }
     }
   }
 }

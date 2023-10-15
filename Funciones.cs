@@ -28,7 +28,7 @@ public class Funciones
             if (funciones.ContainsKey(name))
                 return funciones[name];
         }
-        throw new Exception("Error mango");
+        throw new ERROR(ERROR.ErrorType.SemanticError , "Function "+ name + " is not defined");
     }
     
     public static void nullfunctions(string name, Expresion.Funcion funcion= null!)
@@ -43,7 +43,7 @@ public class Funciones
     {
         nullfunctions("print");
         nullfunctions("cos");
-        nullfunctions("sen");
+        nullfunctions("sin");
         nullfunctions("sqrt");
         nullfunctions("log");
     }

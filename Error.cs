@@ -32,10 +32,4 @@ public class ERROR: Exception
             System.Console.WriteLine(type+ mensaje);
         }
     }
-    public ERROR(string mensaje)
-    {
-        Mensaje = mensaje;
-        hadError=true;
-    }
-   
 }

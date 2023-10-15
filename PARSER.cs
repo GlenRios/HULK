@@ -62,19 +62,19 @@ public class Parser
     {
         return Tokens[current];
     }
-    
-    //
+
+
     public Expresion Parse()
     {
         while (match(TokenType.function))
         {
             current++;
 
-            Token nombre = consume(TokenType.Identificador, "Identifier was expected as the function name");
+            Token nombre = consume(TokenType.Identificador, "Identifier was expected as the function name in " + current);
 
             string name = (string)nombre.Value;
 
-            consume(TokenType.ParentesisAbierto, "Expected '(' after identifier " + previous().Value);
+            consume(TokenType.ParentesisAbierto, "Expected '(' after identifier " + previous().Value + " in " + current);
 
             List<object> argument = new List<object>();
 
@@ -84,14 +84,14 @@ public class Parser
 
                 if (!match(TokenType.ParentesisCerrado))
                 {
-                    consume(TokenType.Coma, "Expected ',' after expression " + previous().Type + " " + previous().Value);
+                    consume(TokenType.Coma, "Expected ',' or ')' after expression " + previous().Type + " " + previous().Value + " in " + current);
                 }
 
             }
 
-            consume(TokenType.ParentesisCerrado, "Missing ')' after the function arguments");
+            consume(TokenType.ParentesisCerrado, "Missing ')' after the function arguments in " + current);
 
-            consume(TokenType.Flecha, "Expected '=>' in the function declaration");
+            consume(TokenType.Flecha, "Expected '=>' in the function declaration in " + current);
 
             if (Funciones.ContainsFuncion(name))
             {
@@ -102,7 +102,7 @@ public class Parser
 
             Expresion funcionCuerpo = expression();
 
-            consume(TokenType.PuntoYComa, "Expected ';' at the end of the expression after " + previous().Type + " " + previous().Value);
+            consume(TokenType.PuntoYComa, " Expected ';' at the end of the expression after " + previous().Type + " " + previous().Value + " in " + current);
 
             Expresion.Funcion expres = new Expresion.Funcion(name, argument, funcionCuerpo);
 
@@ -113,15 +113,14 @@ public class Parser
 
             else
             {
-                ERROR error = new ERROR(ERROR.ErrorType.SyntaxError, " Invalid expression after ';' in " + current);
-                throw new ERROR(ERROR.ErrorType.SyntaxError, "Invalid expression after ';' in " + current);
+                throw new ERROR(ERROR.ErrorType.SyntaxError, " Invalid expression after ';' in " + current);
             }
 
         }
 
         Expresion expr = expression();
 
-        consume(TokenType.PuntoYComa, "Expected ';' at the end of the expression after " + previous().Type + " " + previous().Value);
+        consume(TokenType.PuntoYComa, "Expected ';' at the end of the expression after " + previous().Type + " " + previous().Value + " in " + current);
 
         if (match(TokenType.Final))
 
@@ -277,9 +276,9 @@ public class Parser
         if (match(TokenType.If))
         {
             current++;
-            //consume(TokenType.ParentesisAbierto, "Se esperaba ( despues de if.");
+
             Expresion condicion = primary();
-            //consume(TokenType.ParentesisCerrado, "Se esperaba ) despues de la condicion del if");
+
             Expresion ifcuerpo = expression();
 
             consume(TokenType.Else, " Expected else after if statement in " + current);
@@ -322,7 +321,7 @@ public class Parser
 
                     if (!match(TokenType.ParentesisCerrado))
                     {
-                        consume(TokenType.Coma, " Expected ',' after expression " + previous().Type + " " + previous().Value + " " + current);
+                        consume(TokenType.Coma, " Expected ',' or ')' after expression " + previous().Type + " " + previous().Value + " in " + current);
                     }
 
                     argument.Add(expresion);
@@ -355,22 +354,22 @@ public class Parser
 
             else
             {
-                ERROR error = new ERROR(ERROR.ErrorType.SyntaxError, " Expect a variable name after " + previous().Type + " " + previous().Value);
-                throw new ERROR(ERROR.ErrorType.SyntaxError, " Expect a variable name after " + previous().Type + " " + previous().Value);
+                ERROR error = new ERROR(ERROR.ErrorType.SyntaxError, " Expect a variable name after " + previous().Type + " " + previous().Value + " in " + current);
+                throw new ERROR(ERROR.ErrorType.SyntaxError, " Expect a variable name after " + previous().Type + " " + previous().Value + " in " + current);
             }
 
-            consume(TokenType.Igual, " Expect '=' after variable name");
+            consume(TokenType.Igual, " Expect '=' after variable name in " + current);
 
             Expresion expr = expression();
 
             if (!match(TokenType.In))
             {
-                consume(TokenType.Coma, " Expect ',' after expression " + previous().Type + " " + previous().Value);
+                consume(TokenType.Coma, " Expect ',' or 'in' after expression " + previous().Type + " " + previous().Value + " in " + current);
 
                 if (match(TokenType.In))
                 {
-                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, " Invalid token 'in' after ','");
-                    throw new ERROR(ERROR.ErrorType.LexicalError, " Invalid token 'in' after ','");
+                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, " Invalid token 'in' after ',' in " + current);
+                    throw new ERROR(ERROR.ErrorType.LexicalError, " Invalid token 'in' after ',' in " + current);
                 }
 
             }
@@ -429,14 +428,13 @@ public class Parser
             return expr;
         }
 
-        ERROR error = new ERROR(ERROR.ErrorType.LexicalError, " Invalid token " + peek().Type + " " + peek().Value);
-        throw new ERROR(ERROR.ErrorType.LexicalError, " Invalid token " + peek().Type + " " + peek().Value);
+        throw new ERROR(ERROR.ErrorType.LexicalError, " Invalid token " + peek().Type + " " + peek().Value + " in " + current);
 
     }
     private Token consume(TokenType type, string mensaje)
     {
         if (check(type)) return advance();
-        ERROR error = new ERROR(ERROR.ErrorType.SyntaxError, mensaje);
+        //ERROR error = new ERROR(ERROR.ErrorType.SyntaxError, mensaje);
         throw new ERROR(ERROR.ErrorType.SyntaxError, mensaje);
     }
 

@@ -357,9 +357,15 @@ public class Tokenizador
                 continue;
             }
 
-            //errores.Add(new ERROR(ERROR.ErrorType.LexicalError, x[i] + " is not a valid token"));
+            errores.Add(new ERROR(ERROR.ErrorType.LexicalError, x[i] + " is not a valid token"));
         }
 
         Tokens.Add(new Token(TokenType.Final, "", ""));
+
+        if(Tokens.Count<3)
+        {
+            throw new ERROR(ERROR.ErrorType.SyntaxError , " Invalid expression , valid expressions cannot have less than three tokens");
+        }
+
     }
 }
