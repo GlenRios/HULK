@@ -1,20 +1,24 @@
-﻿namespace HULK;
+﻿using System.Runtime.Intrinsics.Arm;
+
+namespace HULK;
 class Program
 {
   static void Main(string[] args)
   {
-
+    System.Console.WriteLine("[HULK , Idioma de La Universidad de La Habana para Kompilers]");
     Funciones.FuncionesEspeciales();
     while (true)
     {
       System.Console.Write(">");
-      string input = Console.ReadLine();
+      
+      var input = Console.ReadLine();
       if (input == null!)
       {
         Console.WriteLine("Se ha ingresado una linea vacia");
         break;
       }
-      else Run(input);
+
+      else Run((string)input);
     }
 
   }
