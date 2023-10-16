@@ -514,6 +514,7 @@ public abstract class Expresion
 
             else
             {
+                Console.WriteLine(argument[0]);
                 return argument[0];
             }
         }

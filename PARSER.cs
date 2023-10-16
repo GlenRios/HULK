@@ -98,7 +98,7 @@ public class Parser
                 throw new Exception("Functions cannot be redefined");
             }
 
-            Funciones.nullfunctions(name);
+            Funciones.AddFuncion(name);
 
             Expresion funcionCuerpo = expression();
 
@@ -106,7 +106,7 @@ public class Parser
 
             Expresion.Funcion expres = new Expresion.Funcion(name, argument, funcionCuerpo);
 
-            Funciones.nullfunctions(name, expres);
+            Funciones.AddFuncion(name, expres);
 
             if (match(TokenType.Final))
                 return expres;

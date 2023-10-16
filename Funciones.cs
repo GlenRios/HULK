@@ -31,7 +31,7 @@ public class Funciones
         throw new ERROR(ERROR.ErrorType.SemanticError , " Function "+ name + " is not defined");
     }
     
-    public static void nullfunctions(string name, Expresion.Funcion funcion= null!)
+    public static void AddFuncion(string name, Expresion.Funcion funcion= null!)
     {
         if(funciones.ContainsKey(name))
           funciones[name]=funcion;
@@ -41,11 +41,11 @@ public class Funciones
     
     public static void FuncionesEspeciales()
     {
-        nullfunctions("print");
-        nullfunctions("cos");
-        nullfunctions("sin");
-        nullfunctions("sqrt");
-        nullfunctions("log");
+        AddFuncion("print");
+        AddFuncion("cos");
+        AddFuncion("sin");
+        AddFuncion("sqrt");
+        AddFuncion("log");
     }
     
 }
