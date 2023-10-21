@@ -25,7 +25,7 @@ class Program
         {
           Console.WriteLine("An empty line has been entered");
         }
-        
+
         else
         {
           Run(input);
@@ -69,7 +69,8 @@ class Program
 
         else
         {
-          Console.WriteLine(respuesta);
+          if (respuesta != null!)
+            Console.WriteLine(respuesta);
         }
       }
     }
