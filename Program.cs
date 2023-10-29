@@ -32,6 +32,7 @@ class Program
         }
       }
     }
+
   }
   public static void Run(string input)
   {
@@ -51,28 +52,32 @@ class Program
 
     else
     {
+
       Parser parser = new Parser(tokens.Tokens);
 
       Expresion expresion = parser.Parse();
 
-      if (ERROR.hadError == true) return;
+      Dictionary<object, object> value = new Dictionary<object, object>();
+
+      Evaluador evaluador = new Evaluador(expresion);
+
+      object respuesta = evaluador.Run(expresion, value);
+
+      if (Evaluador.errores.Count != 0)
+      {
+        foreach (ERROR x in Evaluador.errores)
+        {
+          System.Console.WriteLine(x.Type + " " + x.Mensaje);
+        }
+      }
 
       else
       {
-        Dictionary<object, object> value = new Dictionary<object, object>();
+        if (respuesta != null!)
+          Console.WriteLine(respuesta);
 
-        Evaluador evaluador = new Evaluador(expresion);
-
-        object respuesta = evaluador.Run(expresion, value);
-
-        if (ERROR.hadError == true) return;
-
-        else
-        {
-          if (respuesta != null!)
-            Console.WriteLine(respuesta);
-        }
       }
     }
   }
 }
+

@@ -22,7 +22,7 @@ public abstract class Expresion
                     return -1 * (double)derecha;
                 }
 
-                throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '-' cannot be used before " + derecha);
+                Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '-' cannot be used before " + derecha));
             }
 
             if (Token.Type == TokenType.Negacion)
@@ -32,7 +32,7 @@ public abstract class Expresion
                     return !(bool)derecha;
                 }
 
-                throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '!' cannot be used before " + derecha);
+                Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '!' cannot be used before " + derecha));
             }
 
             return null!;
@@ -151,8 +151,8 @@ public abstract class Expresion
                 else return false;
             }
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '==' cannot be used between " + izquierda + " " + derecha);
-
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '==' cannot be used between " + izquierda + " and  " + derecha));
+            return null!;
         }
 
         public object NoIgual(object izquierda, object derecha)
@@ -175,7 +175,8 @@ public abstract class Expresion
                 else return false;
             }
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '!=' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '!=' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -185,7 +186,8 @@ public abstract class Expresion
 
                 return (double)izquierda <= (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError ," Operator '<=' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '<=' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -195,7 +197,8 @@ public abstract class Expresion
 
                 return (double)izquierda >= (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '>=' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '>=' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -205,7 +208,8 @@ public abstract class Expresion
 
                 return (double)izquierda < (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '<' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '<' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -215,7 +219,8 @@ public abstract class Expresion
 
                 return (double)izquierda > (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '>' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '>' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -225,7 +230,8 @@ public abstract class Expresion
 
                 return (bool)izquierda && (bool)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError ," Operator '&&' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '&&' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -235,8 +241,8 @@ public abstract class Expresion
 
                 return (bool)izquierda || (bool)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '||' cannot be used between " + izquierda + " " + derecha);
-
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '||' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
         }
 
         public object Suma(object izquierda, object derecha)
@@ -245,7 +251,8 @@ public abstract class Expresion
 
                 return (double)izquierda + (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '+' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '+' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -255,7 +262,9 @@ public abstract class Expresion
 
                 return (double)izquierda - (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '-' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '-' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
+
 
         }
 
@@ -265,7 +274,8 @@ public abstract class Expresion
 
                 return (double)izquierda * (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '*' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '*' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -275,7 +285,8 @@ public abstract class Expresion
 
                 return (double)izquierda / (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '/' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '/' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -285,7 +296,8 @@ public abstract class Expresion
 
                 return Math.Pow((double)izquierda, (double)derecha);
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '^' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '^' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -295,7 +307,8 @@ public abstract class Expresion
 
                 return (double)izquierda % (double)derecha;
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '%' cannot be used between " + izquierda + " " + derecha);
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '%' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
 
         }
 
@@ -317,18 +330,21 @@ public abstract class Expresion
             if (derecha is string)
             {
                 resultado += derecha;
+                return resultado;
             }
             if (derecha is double)
             {
                 resultado += (double)derecha;
+                return resultado;
             }
             if (derecha is bool)
             {
                 resultado += (bool)derecha;
+                return resultado;
             }
 
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Operator '@' cannot be used between " + izquierda + " " + derecha);
-
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Operator '@' cannot be used between " + izquierda + " and " + derecha));
+            return null!;
         }
     }
 
@@ -370,17 +386,21 @@ public abstract class Expresion
         {
             if (asign is null)
             {
-                throw new ERROR(ERROR.ErrorType.SemanticError , " Variable " + variable.Value + " does not have a value assigned");
+                Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Variable " + variable.Value + " does not have a value assigned"));
             }
 
-            foreach (var objecto in asign)
+            else
             {
-                if (asign.ContainsKey(variable.Value))
+                foreach (object x in asign)
+                {
+                    if (asign.ContainsKey(variable.Value))
 
-                    return asign[variable.Value];
+                        return asign[variable.Value];
+                }
             }
-
-            throw new ERROR(ERROR.ErrorType.SemanticError , " Variable " + variable.Value + " no tiene un valor asignado");
+            
+            Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Variable " + variable.Value + " does not have a value assigned"));
+            return null!;
 
         }
     }
@@ -396,6 +416,7 @@ public abstract class Expresion
             Argumento = argumento;
             this.funcion = funcion;
         }
+
         public object VisitExprLlamada(ExprLLamadaFuncion call, Dictionary<object, object> valor)
         {
             List<object> valores = new List<object>();
@@ -433,7 +454,7 @@ public abstract class Expresion
         {
             if (argument.Count != 1)
             {
-                throw new ERROR(ERROR.ErrorType.SyntaxError , " Function 'sin' only receives one parameter as an argument");
+                throw new ERROR(ERROR.ErrorType.SyntaxError, " Function 'sin' only receives one parameter as an argument");
             }
 
             else
@@ -443,9 +464,11 @@ public abstract class Expresion
                     return Math.Sin((double)argument[0]);
                 }
 
-                throw new ERROR(ERROR.ErrorType.SemanticError , " function sin only receives numbers as parameters");
+                Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " function sin only receives numbers as parameters"));
 
             }
+
+            return null!;
 
         }
 
@@ -453,7 +476,7 @@ public abstract class Expresion
         {
             if (argument.Count != 1)
             {
-                throw new ERROR(ERROR.ErrorType.SyntaxError , " Function 'cos' only receives one parameter as an argument");
+                throw new ERROR(ERROR.ErrorType.SyntaxError, " Function 'cos' only receives one parameter as an argument");
             }
 
             else
@@ -463,16 +486,19 @@ public abstract class Expresion
                     return Math.Cos((double)argument[0]);
                 }
 
-                throw new ERROR(ERROR.ErrorType.SemanticError , " function 'cos' only receives numbers as parameters");
+                Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " function 'cos' only receives numbers as parameters"));
 
             }
+
+            return null!;
+
         }
 
         public object Sqrt(List<object> argument)
         {
             if (argument.Count != 1)
             {
-                throw new ERROR(ERROR.ErrorType.SyntaxError , " Function 'sqrt' only receives one parameter as an argument");
+                throw new ERROR(ERROR.ErrorType.SyntaxError, " Function 'sqrt' only receives one parameter as an argument");
             }
 
             else
@@ -482,16 +508,19 @@ public abstract class Expresion
                     return Math.Sqrt((double)argument[0]);
                 }
 
-                throw new ERROR(ERROR.ErrorType.SemanticError , " function 'sqrt' only receives numbers as parameters");
+                Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " function 'sqrt' only receives numbers as parameters"));
 
             }
+
+            return null!;
+
         }
 
         public object Log(List<object> argument)
         {
             if (argument.Count != 2)
             {
-                throw new ERROR(ERROR.ErrorType.SyntaxError , " Function 'log' only receives two parameter as arguments");
+                throw new ERROR(ERROR.ErrorType.SyntaxError, " Function 'log' only receives two parameter as arguments");
             }
 
             else
@@ -501,15 +530,18 @@ public abstract class Expresion
                     return Math.Log((double)argument[0], (double)argument[1]);
                 }
 
-                throw new ERROR(ERROR.ErrorType.SemanticError , " Function 'log' only receives numbers as arguments");
+                Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Function 'log' only receives numbers as arguments"));
             }
+
+            return null!;
+
         }
 
         public object Print(List<object> argument)
         {
             if (argument.Count != 1)
             {
-                throw new ERROR(ERROR.ErrorType.SyntaxError , " Function 'print' only receives one parameter as an argument");
+                throw new ERROR(ERROR.ErrorType.SyntaxError, " Function 'print' only receives one parameter as an argument");
             }
 
             else
@@ -527,16 +559,18 @@ public abstract class Expresion
             {
                 for (int i = 0; i < valores.Count; i++)
                 {
-                    value.Add(funcion.Parametros[i],valores[i]);
+                    value.Add(funcion.Parametros[i], valores[i]);
                 }
-                
-                return Evaluador.GetValue(funcion.Cuerpo,value);
+
+                return Evaluador.GetValue(funcion.Cuerpo, value);
             }
 
             else
             {
-                throw new ERROR(ERROR.ErrorType.SemanticError," function "+ funcion.Identificador+ " only receives " + funcion.Parametros.Count +" parameter as arguments");
+                Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " function " + funcion.Identificador + " only receives " + funcion.Parametros.Count + " parameter as arguments"));
+                return null!;
             }
+
         }
 
     }

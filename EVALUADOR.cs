@@ -3,6 +3,9 @@ namespace HULK;
 public class Evaluador
 {
     public Expresion Parser;
+
+    public static List<ERROR> errores = new List<ERROR>();
+
     public Evaluador(Expresion parser)
     {
         Parser = parser;
@@ -35,22 +38,22 @@ public class Evaluador
         if (expr is Expresion.If)
         {
             Expresion.If If = (Expresion.If)expr;
-            object x= GetValue(If.Condicion,asig);
-            if(!(x is bool))
+            object x = GetValue(If.Condicion, asig);
+            if (!(x is bool))
             {
-                throw new ERROR(ERROR.ErrorType.SemanticError," if condition must return a bool");
+                errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " if condition must return a bool"));
             }
-            
-            else 
+
+            else
             {
-                if((bool)x==true)
+                if ((bool)x == true)
                 {
-                    return GetValue(If.IfCuerpo,asig);
+                    return GetValue(If.IfCuerpo, asig);
                 }
-                
-                else return GetValue(If.ElseCuerpo,asig);
+
+                else return GetValue(If.ElseCuerpo, asig);
             }
-                        
+
         }
 
         if (expr is Expresion.LetIn)
@@ -88,7 +91,7 @@ public class Evaluador
         {
             if (resp.ContainsKey(expresion.Nombre.Value))
             {
-                throw new ERROR(ERROR.ErrorType.SemanticError," variable " + expresion.Nombre.Value+ " already has a value assigned");
+                errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " variable " + expresion.Nombre.Value + " already has a value assigned"));
             }
 
             else resp.Add(expresion.Nombre.Value, GetValue(expresion.Valor, resp));

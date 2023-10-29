@@ -1,6 +1,6 @@
 
 namespace HULK;
-public class ERROR: Exception
+public class ERROR : Exception
 {
     public enum ErrorType
     {
@@ -11,21 +11,16 @@ public class ERROR: Exception
 
     public string Mensaje;
     public ErrorType Type;
-    public static bool hadError= false;
+    public static bool hadError = false;
 
     public ERROR(ErrorType type, string mensaje)
     {
-        Type=type;
-        Mensaje=mensaje;
-        hadError=true;
-        if(type==ErrorType.SyntaxError)
+        Type = type;
+        Mensaje = mensaje;
+        hadError = true;
+        if (type == ErrorType.SyntaxError)
         {
-            System.Console.WriteLine(type+ mensaje);
-        }
-
-        if(type==ErrorType.SemanticError)
-        {
-            System.Console.WriteLine(type+ mensaje);
+            System.Console.WriteLine(type + mensaje);
         }
     }
 }
