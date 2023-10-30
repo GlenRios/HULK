@@ -8,9 +8,9 @@ public class Tokenizador
     public Tokenizador(string input)
     {
         Tokens = new List<Token>();
-        
+
         errores = new List<ERROR>();
-        
+
         MakeTokens(input);
     }
 
@@ -283,7 +283,7 @@ public class Tokenizador
                 continue;
             }
 
-            if ( x[i] == 'A' || x[i] == 'a' || x[i] == 'B' || x[i] == 'b' || x[i] == 'C' || x[i] == 'c' || x[i] == 'D' || x[i] == 'd' || x[i] == 'E' || x[i] == 'e' || x[i] == 'F' || x[i] == 'f' || x[i] == 'G' || x[i] == 'g' || x[i] == 'H' || x[i] == 'h' || x[i] == 'I' || x[i] == 'i' || x[i] == 'J' || x[i] == 'j' || x[i] == 'K' || x[i] == 'k' || x[i] == 'L' || x[i] == 'l' || x[i] == 'M' || x[i] == 'm' || x[i] == 'N' || x[i] == 'n' || x[i] == 'O' || x[i] == 'o' || x[i] == 'P' || x[i] == 'p' || x[i] == 'Q' || x[i] == 'q' || x[i] == 'R' || x[i] == 'r' || x[i] == 'S' || x[i] == 's' || x[i] == 'T' || x[i] == 't' || x[i] == 'U' || x[i] == 'u' || x[i] == 'V' || x[i] == 'v' || x[i] == 'W' || x[i] == 'W' || x[i] == 'X' || x[i] == 'x' || x[i] == 'Y' || x[i] == 'y' || x[i] == 'Z' || x[i] == 'z')
+            if (x[i] == 'A' || x[i] == 'a' || x[i] == 'B' || x[i] == 'b' || x[i] == 'C' || x[i] == 'c' || x[i] == 'D' || x[i] == 'd' || x[i] == 'E' || x[i] == 'e' || x[i] == 'F' || x[i] == 'f' || x[i] == 'G' || x[i] == 'g' || x[i] == 'H' || x[i] == 'h' || x[i] == 'I' || x[i] == 'i' || x[i] == 'J' || x[i] == 'j' || x[i] == 'K' || x[i] == 'k' || x[i] == 'L' || x[i] == 'l' || x[i] == 'M' || x[i] == 'm' || x[i] == 'N' || x[i] == 'n' || x[i] == 'O' || x[i] == 'o' || x[i] == 'P' || x[i] == 'p' || x[i] == 'Q' || x[i] == 'q' || x[i] == 'R' || x[i] == 'r' || x[i] == 'S' || x[i] == 's' || x[i] == 'T' || x[i] == 't' || x[i] == 'U' || x[i] == 'u' || x[i] == 'V' || x[i] == 'v' || x[i] == 'W' || x[i] == 'W' || x[i] == 'X' || x[i] == 'x' || x[i] == 'Y' || x[i] == 'y' || x[i] == 'Z' || x[i] == 'z')
             {
                 string a = "";
                 a = a + x[i];
@@ -358,14 +358,14 @@ public class Tokenizador
                 continue;
             }
 
-            errores.Add(new ERROR(ERROR.ErrorType.LexicalError," '"+ x[i] + "' is not a valid token" + i));
+            errores.Add(new ERROR(ERROR.ErrorType.LexicalError, " '" + x[i] + "' is not a valid token" + i));
         }
 
         Tokens.Add(new Token(TokenType.Final, "", ""));
 
-        if(Tokens.Count<3)
+        if (Tokens.Count < 3)
         {
-            throw new ERROR(ERROR.ErrorType.SyntaxError , " Invalid expression , valid expressions cannot have less than three tokens");
+            throw new ERROR(ERROR.ErrorType.SyntaxError, " Invalid expression , valid expressions cannot have less than three tokens");
         }
 
     }

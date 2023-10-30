@@ -59,7 +59,7 @@ public class Evaluador
         if (expr is Expresion.LetIn)
         {
             Expresion.LetIn let = (Expresion.LetIn)expr;
-            Dictionary<object, object> answ = DictLetIn(let.LetCuerpo);
+            Dictionary<object, object> answ = DictLetIn(let.LetCuerpo, asig);
             return GetValue(let.InCuerpo, answ);
         }
 
@@ -83,18 +83,24 @@ public class Evaluador
         return null!;
     }
 
-    private static Dictionary<object, object> DictLetIn(List<Expresion.ExprAsignar> asignar)
+    private static Dictionary<object, object> DictLetIn(List<Expresion.ExprAsignar> asignar, Dictionary<object, object> asig)
     {
         Dictionary<object, object> resp = new Dictionary<object, object>();
 
+        foreach (var x in asig)
+        {
+            if (resp.ContainsKey(x)) continue;
+            else resp.Add(x.Key, x.Value);
+        }
+
         foreach (var expresion in asignar)
         {
-            if (resp.ContainsKey(expresion.Nombre.Value))
+            if (resp.ContainsKey(expresion.Nombre.Value) && !asig.ContainsKey(expresion.Nombre.Value))
             {
                 errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " variable " + expresion.Nombre.Value + " already has a value assigned"));
             }
 
-            else resp.Add(expresion.Nombre.Value, GetValue(expresion.Valor, resp));
+            else resp[expresion.Nombre.Value] = GetValue(expresion.Valor, resp);
         }
 
         return resp;
