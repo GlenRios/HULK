@@ -18,9 +18,5 @@ public class ERROR : Exception
         Type = type;
         Mensaje = mensaje;
         hadError = true;
-        if (type == ErrorType.SyntaxError)
-        {
-            System.Console.WriteLine(type + mensaje);
-        }
     }
 }

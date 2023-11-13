@@ -354,7 +354,6 @@ public class Parser
 
             else
             {
-                ERROR error = new ERROR(ERROR.ErrorType.SyntaxError, " Expect a variable name after " + previous().Type + " " + previous().Value + " in " + current);
                 throw new ERROR(ERROR.ErrorType.SyntaxError, " Expect a variable name after " + previous().Type + " " + previous().Value + " in " + current);
             }
 
@@ -368,7 +367,6 @@ public class Parser
 
                 if (match(TokenType.In))
                 {
-                    ERROR error = new ERROR(ERROR.ErrorType.LexicalError, " Invalid token 'in' after ',' in " + current);
                     throw new ERROR(ERROR.ErrorType.LexicalError, " Invalid token 'in' after ',' in " + current);
                 }
 
