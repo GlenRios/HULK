@@ -3,8 +3,11 @@ namespace HULK;
 
 public class Tokenizador
 {
+    //en esta lista iremos guardando todos los tokens
     public List<Token> Tokens;
+    //esta lista es para los errores lexicos
     public List<ERROR> errores;
+    //en el constructor se le pasa como parametro el string insertado por el usuario 
     public Tokenizador(string input)
     {
         Tokens = new List<Token>();
@@ -14,6 +17,9 @@ public class Tokenizador
         MakeTokens(input);
     }
 
+    //Este metodo comienza a iterar por el string verificando si cada 
+    //caracter coincide con algun tipo de token y creandolo para guardarlo en la lista.
+    //cuando llega al final guarda un token de tipo final para poder comprobar en el parser si estamos al final de la lista de tokens.
     public void MakeTokens(string x)
     {
         for (int i = 0; i < x.Length; i++)
@@ -22,67 +28,67 @@ public class Tokenizador
 
             if (x[i] == ';')
             {
-                Tokens.Add(new Token(TokenType.PuntoYComa, "Separadores", ""));
+                Tokens.Add(new Token(TokenType.PuntoYComa, ""));
                 continue;
             }
 
             if (x[i] == '@')
             {
-                Tokens.Add(new Token(TokenType.Concatenar, "Operadores", ""));
+                Tokens.Add(new Token(TokenType.Concatenar, ""));
                 continue;
             }
 
             if (x[i] == '(')
             {
-                Tokens.Add(new Token(TokenType.ParentesisAbierto, "Separadores", ""));
+                Tokens.Add(new Token(TokenType.ParentesisAbierto, ""));
                 continue;
             }
 
             if (x[i] == ')')
             {
-                Tokens.Add(new Token(TokenType.ParentesisCerrado, "Separadores", ""));
+                Tokens.Add(new Token(TokenType.ParentesisCerrado, ""));
                 continue;
             }
 
             if (x[i] == '*')
             {
-                Tokens.Add(new Token(TokenType.Multiplicacion, "Operadores", ""));
+                Tokens.Add(new Token(TokenType.Multiplicacion, ""));
                 continue;
             }
 
             if (x[i] == '/')
             {
-                Tokens.Add(new Token(TokenType.Division, "Operadores", ""));
+                Tokens.Add(new Token(TokenType.Division, ""));
                 continue;
             }
 
             if (x[i] == '%' && (i != x.Length - 1))
             {
-                Tokens.Add(new Token(TokenType.Modulo, "Operadores", ""));
+                Tokens.Add(new Token(TokenType.Modulo, ""));
                 continue;
             }
 
             if (x[i] == '+')
             {
-                Tokens.Add(new Token(TokenType.Suma, "Operadores", ""));
+                Tokens.Add(new Token(TokenType.Suma, ""));
                 continue;
             }
 
             if (x[i] == '-')
             {
-                Tokens.Add(new Token(TokenType.Resta, "Operadores", ""));
+                Tokens.Add(new Token(TokenType.Resta, ""));
                 continue;
             }
 
             if (x[i] == ',')
             {
-                Tokens.Add(new Token(TokenType.Coma, "Separadores", ""));
+                Tokens.Add(new Token(TokenType.Coma, ""));
                 continue;
             }
 
             if (x[i] == '^')
             {
-                Tokens.Add(new Token(TokenType.Pow, "Operadores", ""));
+                Tokens.Add(new Token(TokenType.Pow, ""));
                 continue;
             }
 
@@ -90,12 +96,12 @@ public class Tokenizador
             {
                 if (x[i + 1] == '=')
                 {
-                    Tokens.Add(new Token(TokenType.NoIgual, "Comparacion", ""));
+                    Tokens.Add(new Token(TokenType.NoIgual, ""));
                     i++;
                     continue;
                 }
 
-                else Tokens.Add(new Token(TokenType.Negacion, "OperadorBooleano", ""));
+                else Tokens.Add(new Token(TokenType.Negacion, ""));
                 continue;
             }
 
@@ -103,7 +109,7 @@ public class Tokenizador
             {
                 if (x[i + 1] == '|')
                 {
-                    Tokens.Add(new Token(TokenType.Or, "OperadorBooleano", ""));
+                    Tokens.Add(new Token(TokenType.Or, ""));
                     i++;
                     continue;
                 }
@@ -120,7 +126,7 @@ public class Tokenizador
             {
                 if (x[i + 1] == '&')
                 {
-                    Tokens.Add(new Token(TokenType.And, "OperadorBooleano", ""));
+                    Tokens.Add(new Token(TokenType.And, ""));
                     i++;
                     continue;
                 }
@@ -136,14 +142,14 @@ public class Tokenizador
             {
                 if (x[i + 1] == '=')
                 {
-                    Tokens.Add(new Token(TokenType.MayorIgual, "Comparacion", ""));
+                    Tokens.Add(new Token(TokenType.MayorIgual, ""));
                     i++;
                     continue;
                 }
 
                 else
                 {
-                    Tokens.Add(new Token(TokenType.Mayor, "Comparacion", ""));
+                    Tokens.Add(new Token(TokenType.Mayor, ""));
                     continue;
                 }
             }
@@ -152,14 +158,14 @@ public class Tokenizador
             {
                 if (x[i + 1] == '=')
                 {
-                    Tokens.Add(new Token(TokenType.MenorIgual, "Comparacion", ""));
+                    Tokens.Add(new Token(TokenType.MenorIgual, ""));
                     i++;
                     continue;
                 }
 
                 else
                 {
-                    Tokens.Add(new Token(TokenType.Menor, "Comparacion", ""));
+                    Tokens.Add(new Token(TokenType.Menor, ""));
                     continue;
                 }
             }
@@ -168,21 +174,21 @@ public class Tokenizador
             {
                 if (x[i + 1] == '=')
                 {
-                    Tokens.Add(new Token(TokenType.IgualIgual, "Comparacion", ""));
+                    Tokens.Add(new Token(TokenType.IgualIgual, ""));
                     i++;
                     continue;
                 }
 
                 if (x[i + 1] == '>')
                 {
-                    Tokens.Add(new Token(TokenType.Flecha, "OperadorFunciones", ""));
+                    Tokens.Add(new Token(TokenType.Flecha, ""));
                     i++;
                     continue;
                 }
 
                 else
                 {
-                    Tokens.Add(new Token(TokenType.Igual, "Operadores", ""));
+                    Tokens.Add(new Token(TokenType.Igual, ""));
                     continue;
                 }
             }
@@ -213,7 +219,7 @@ public class Tokenizador
                     continue;
                 }
 
-                Tokens.Add(new Token(TokenType.String, "Variables", a));
+                Tokens.Add(new Token(TokenType.String, a));
                 continue;
             }
 
@@ -279,7 +285,7 @@ public class Tokenizador
                     continue;
                 }
 
-                Tokens.Add(new Token(TokenType.Number, "Variables", double.Parse(numero)));
+                Tokens.Add(new Token(TokenType.Number, double.Parse(numero)));
                 continue;
             }
 
@@ -302,66 +308,66 @@ public class Tokenizador
 
                 if (a == "true")
                 {
-                    Tokens.Add(new Token(TokenType.True, "Variable", ""));
+                    Tokens.Add(new Token(TokenType.True, ""));
                     continue;
                 }
 
                 if (a == "false")
                 {
-                    Tokens.Add(new Token(TokenType.False, "Variable", ""));
+                    Tokens.Add(new Token(TokenType.False, ""));
                     continue;
                 }
 
                 if (a == "PI")
                 {
-                    Tokens.Add(new Token(TokenType.PI, "Constante", Math.PI));
+                    Tokens.Add(new Token(TokenType.PI, Math.PI));
                     continue;
                 }
 
                 if (a == "EULER")
                 {
-                    Tokens.Add(new Token(TokenType.EULER, "Constantes", Math.E));
+                    Tokens.Add(new Token(TokenType.EULER, Math.E));
                     continue;
                 }
 
                 if (a == "if")
                 {
-                    Tokens.Add(new Token(TokenType.If, "Palabras Reservadas", ""));
+                    Tokens.Add(new Token(TokenType.If, ""));
                     continue;
                 }
 
                 if (a == "else")
                 {
-                    Tokens.Add(new Token(TokenType.Else, "Palabras Reservadas", ""));
+                    Tokens.Add(new Token(TokenType.Else, ""));
                     continue;
                 }
 
                 if (a == "let")
                 {
-                    Tokens.Add(new Token(TokenType.Let, "Palabras Reservadas", ""));
+                    Tokens.Add(new Token(TokenType.Let, ""));
                     continue;
                 }
 
                 if (a == "in")
                 {
-                    Tokens.Add(new Token(TokenType.In, "Palabras Reservadas", ""));
+                    Tokens.Add(new Token(TokenType.In, ""));
                     continue;
                 }
 
                 if (a == "function")
                 {
-                    Tokens.Add(new Token(TokenType.function, "Palabras Reservadas", ""));
+                    Tokens.Add(new Token(TokenType.function, ""));
                     continue;
                 }
 
-                Tokens.Add(new Token(TokenType.Identificador, "Variable", a));
+                Tokens.Add(new Token(TokenType.Identificador, a));
                 continue;
             }
 
             errores.Add(new ERROR(ERROR.ErrorType.LexicalError, " '" + x[i] + "' is not a valid token" + i));
         }
 
-        Tokens.Add(new Token(TokenType.Final, "", ""));
+        Tokens.Add(new Token(TokenType.Final, ""));
 
         if (Tokens.Count < 3)
         {

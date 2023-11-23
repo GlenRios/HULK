@@ -1,13 +1,12 @@
 namespace HULK;
+//En esta clase definimos las propiedades que van a tener nuestros tokens
 public class Token
 {
     public TokenType Type;
-    public string Grupo;
     public object Value;
-    public Token(TokenType type, string grupo, object value)
+    public Token(TokenType type, object value)
     {
         Type = type;
-        Grupo = grupo;
         Value = value;
     }
 }

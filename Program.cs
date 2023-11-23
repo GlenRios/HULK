@@ -1,14 +1,15 @@
-﻿using System.Net.NetworkInformation;
-using System.Runtime.Intrinsics.Arm;
-
+﻿
 namespace HULK;
 class Program
 {
   static void Main(string[] args)
   {
     Console.ForegroundColor = ConsoleColor.DarkYellow;
+
     System.Console.WriteLine("[HULK , Idioma de La Universidad de La Habana para Kompilers]");
+
     Funciones.FuncionesEspeciales();
+
     while (true)
     {
       Console.Write(">");
@@ -18,7 +19,9 @@ class Program
       if (input == null)
       {
         Console.ForegroundColor = ConsoleColor.DarkRed;
+
         Console.WriteLine("An empty line has been entered");
+
         Console.ForegroundColor = ConsoleColor.DarkYellow;
       }
 
@@ -27,7 +30,9 @@ class Program
         if (input.Length == 0)
         {
           Console.ForegroundColor = ConsoleColor.DarkRed;
+
           Console.WriteLine("An empty line has been entered");
+
           Console.ForegroundColor = ConsoleColor.DarkYellow;
         }
 
@@ -41,23 +46,29 @@ class Program
   }
   public static void Run(string input)
   {
-    try
-    {
-      Tokenizador tokens = new Tokenizador(input);/*foreach (var token in tokens.Tokens)
+
+    Tokenizador tokens = new Tokenizador(input);/*foreach (var token in tokens.Tokens)
     {
       Console.WriteLine(token.Type + " " + token.Grupo + " " + token.Value);
     }*/
 
-      if (tokens.errores.Count != 0)
+    if (tokens.errores.Count != 0)
+    {
+      foreach (var error in tokens.errores)
       {
-        foreach (var error in tokens.errores)
-        {
-          Console.ForegroundColor = ConsoleColor.DarkRed;
-          System.Console.WriteLine(error.Type + " " + error.Mensaje);
-          Console.ForegroundColor = ConsoleColor.DarkYellow;
-        }
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+
+        System.Console.WriteLine(error.Type + " " + error.Mensaje);
+
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
       }
-      else
+
+      tokens.errores=new();
+    }
+
+    else
+    {
+      try
       {
         Parser parser = new Parser(tokens.Tokens);
 
@@ -74,27 +85,32 @@ class Program
           foreach (ERROR x in Evaluador.errores)
           {
             Console.ForegroundColor = ConsoleColor.DarkRed;
+
             System.Console.WriteLine(x.Type + " " + x.Mensaje);
+
             Console.ForegroundColor = ConsoleColor.DarkYellow;
           }
+
+          Evaluador.errores= new();
         }
 
         else
         {
           if (respuesta != null!)
+
             Console.WriteLine(respuesta);
 
         }
       }
-    }
+      catch (ERROR x)
+      {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
 
-    catch (ERROR x)
-    {
-      Console.ForegroundColor = ConsoleColor.DarkRed;
-      System.Console.WriteLine(x.Type + " " + x.Mensaje);
-      Console.ForegroundColor = ConsoleColor.DarkYellow;
-    }
+        System.Console.WriteLine(x.Type + " " + x.Mensaje);
 
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+      }
+    }
   }
 }
 

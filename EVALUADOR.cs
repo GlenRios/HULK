@@ -15,6 +15,11 @@ public class Evaluador
         return GetValue(expr, asign);
     }
 
+    //este metodo es el utilizado para evaluar , luego de parsear tendremos una expresion creada que estara conformada por 
+    //mas expresiones dentro , inicialmente cuando llamamos a este metodo por primera vez le pasaremos un diccionario vacio
+    //y la expresion conformada en el parser , luego comprobara que tipo de expresion es y en dependencia de cual sea procedera a llamar 
+    //al metodo correspondiente para cada tipo . Como puede notarse los llamados son recursivos por lo cual este metodo ira evaluando desde
+    //lo mas profundo o interno hasta lo mas externo de la expresion.
     public static object GetValue(Expresion expr, Dictionary<object, object> asig)
     {
         if (expr is Expresion.ExprUnaria)
@@ -83,6 +88,8 @@ public class Evaluador
         return null!;
     }
 
+    //este metodo esta creado para el caso especifico del LetCuerpo pues como tedremos asignacion de valores , debemos comprobar
+    //que esta variable no tiene ya un valor asignado o si el valor que se le asigno en la declaracion es valido.
     private static Dictionary<object, object> DictLetIn(List<Expresion.ExprAsignar> asignar, Dictionary<object, object> asig)
     {
         Dictionary<object, object> resp = new Dictionary<object, object>();

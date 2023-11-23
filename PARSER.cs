@@ -52,7 +52,7 @@ public class Parser
     {
         return Tokens[current - 1];
     }
-    //Retorna verdadero si el Token es PuntoYComa , o sea que esta al final de la linea
+    //Retorna verdadero si el Token es Final , o sea que esta al final de la linea
     private bool IAE()
     {
         return peek().Type == TokenType.Final;
@@ -63,7 +63,8 @@ public class Parser
         return Tokens[current];
     }
 
-
+    //este es el metodo principal que comprueba inicialmente si estamos en precencia de una declaracion de funcion, si no llama a expression()
+    //una vez retornado un valor consume ; porque es lo esperado al final de la linea y luego el token Final.
     public Expresion Parse()
     {
         while (match(TokenType.function))
@@ -131,11 +132,15 @@ public class Parser
             throw new ERROR(ERROR.ErrorType.SyntaxError, " Invalid espression after ';' in " + current);
 
     }
+   
+    //simplemete se expande a logical()
     private Expresion expression()
     {
         return logical();
     }
 
+    //se expande a equality primero y luego de retornado un valor para expr comprueba si el token en el que estamos es de tipo && or ||
+    //si lo es creara una nueva expresion bianria y la retornara ,si no seguira retornando el llamado.
     private Expresion logical()
     {
         Expresion expr = equality();
@@ -152,6 +157,8 @@ public class Parser
         return expr;
     }
 
+    //se expande a comparison primero y luego de retornado un valor para expr comprueba si el token en el que estamos es de tipo == or !=
+    //si lo es creara una nueva expresion bianria y la retornara, si no seguira retornando la expr que llevaba.
     private Expresion equality()
     {
         Expresion expr = comparison();
@@ -168,6 +175,9 @@ public class Parser
         return expr;
     }
 
+
+    //se expande a concat primero y luego de retornado un valor para expr comprueba si el token en el que estamos es de tipo > or <
+    // or => or <= si lo es creara una nueva expresion bianria y la retornara, si no seguira retornando la expr que llevaba.
     private Expresion comparison()
     {
         Expresion expr = concat();
@@ -184,6 +194,8 @@ public class Parser
         return expr;
     }
 
+    //se expande a Term primero y luego de retornado un valor para expr comprueba si el token en el que estamos es de tipo @
+    //si lo es creara una nueva expresion bianria y la retornara, si no seguira retornando la expr que llevaba.
     private Expresion concat()
     {
         Expresion expr = Term();
@@ -198,6 +210,8 @@ public class Parser
         return expr;
     }
 
+    //se expande a factor primero y luego de retornado un valor para expr comprueba si el token en el que estamos es de tipo + or -
+    //si lo es creara una nueva expresion bianria y la retornara, si no seguira retornando la expr que llevaba.
     private Expresion Term()
     {
         Expresion expr = factor();
@@ -214,6 +228,8 @@ public class Parser
         return expr;
     }
 
+    //se expande a pow primero y luego de retornado un valor para expr comprueba si el token en el que estamos es de tipo * or /
+    //si lo es creara una nueva expresion bianria y la retornara, si no seguira retornando la expr que llevaba.
     private Expresion factor()
     {
         Expresion expr = pow();
@@ -230,6 +246,8 @@ public class Parser
         return expr;
     }
 
+    //se expande a mod primero y luego de retornado un valor para expr comprueba si el token en el que estamos es de tipo ^
+    //si lo es creara una nueva expresion bianria y la retornara, si no seguira retornando la expr que llevaba.
     private Expresion pow()
     {
         Expresion expr = mod();
@@ -244,6 +262,8 @@ public class Parser
         return expr;
     }
 
+    //se expande a unary primero y luego de retornado un valor para expr comprueba si el token en el que estamos es de tipo %
+    //si lo es creara una nueva expresion bianria y la retornara, si no seguira retornando la expr que llevaba.
     private Expresion mod()
     {
         Expresion expr = unary();
@@ -258,6 +278,8 @@ public class Parser
         return expr;
     }
 
+    //comprueba que el token sobre el que estamos sea de tipo - o ! , si lo es llamariamos expresion para crear la expresion derecha 
+    //de la unary expr y luego retornaria una expr unaria , si el token no es de ese tipo entonces retorna Stm
     private Expresion unary()
     {
         TokenType[] a = { TokenType.Resta, TokenType.Negacion };
@@ -269,9 +291,22 @@ public class Parser
             return new Expresion.ExprUnaria(operador, rigth);
         }
 
-        return IFORLET();
+        return Stm();
     }
-    private Expresion IFORLET()
+    
+    //comprueba si el token en el que estamos e de tipo if , si lo es crea mi expresion de tipo if comprobando que este bien estructurada
+    //y se retorna dicha expresion.
+    
+    //si el token no es de tipo if comprueba si es de tipo let , si lo es se crea una expresion de tipo let donde para recoger el letCuerpo
+    //se llama al metodo Asign(), siempre comprobando que la estructura sea correcta y se retorna dicha expresion.
+    
+    //si el token no es de tipo let entonces comprueba si es de tipo identificador, si lo es , tenemos dos posibles casos , en el que sea un llamado
+    //de funcion donde comprobaremos primero que nuestra funcion exita o este declarada por el usuario, luego se crearia una expresion de tipo llamado 
+    //funcion y se retornaria , comprobando que la estructura sea correcta. Si es un simple identificador entonces retornara una expresion de tipo
+    //variable.
+
+    //si no es ninguna de las anteriores retorna primary()
+    private Expresion Stm()
     {
         if (match(TokenType.If))
         {
@@ -339,13 +374,14 @@ public class Parser
         return primary();
     }
 
+   //se usa para crear la lista de expresiones de asign para el letCuerpo.
     private List<Expresion.ExprAsignar> Asign()
     {
         List<Expresion.ExprAsignar> answer = new List<Expresion.ExprAsignar>();
 
         while (!match(TokenType.In))
         {
-            Token name = new Token(TokenType.Identificador, "", "");
+            Token name = new Token(TokenType.Identificador, "");
 
             if (match(TokenType.Identificador))
             {
@@ -378,6 +414,16 @@ public class Parser
         return answer;
     }
 
+    //primary es el ultimo metodo en ser llamado y donde e recogen las expresiones mas singulares , como expresiones literales o expresiones entre
+    //parentesis .
+    //primero comprueba si el token es de tipo false ,de serlo retorna una expression literal cuyo valor es false.
+    //luego si el token es de tipo true hace lo mismo.
+    //si son las constantes PI o E tambien retorna el mismo tipo de expresion
+    //Luego comprueba si es number o string y de serlo hace lo mismo que con los anteriores.
+    //si es ParentesisAbierto entonces recoge llama a expresion en el token siguiente y luego de recibido un valor para dicha expresion cmprueba 
+    //que el token en que esta es de tipo parentesisCerrado , si no lo es lanza un error , si lo es retorna dicha expresion creada.
+    //finalmente si no es nada de lo anterior entonces lanza un error pues el token en esa posicion no esta bien colocado por lo 
+    //que la expresion es invalida.
     private Expresion primary()
     {
         if (match(TokenType.False))
@@ -429,6 +475,9 @@ public class Parser
         throw new ERROR(ERROR.ErrorType.LexicalError, " Invalid token " + peek().Type + " " + peek().Value + " in " + current);
 
     }
+    
+    //este metodo es de los mas importantes y usados , que lo que hace es comprobar si el token sobre el que estoy es del mismo tipo del esperado
+    //si lo es llama a advance() si no lanza un error con un mensaje sobre el tipo y la posicion.
     private Token consume(TokenType type, string mensaje)
     {
         if (check(type)) return advance();

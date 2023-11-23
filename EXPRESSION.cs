@@ -1,8 +1,10 @@
 
 namespace HULK;
+//En esta clase crearemos objectos de algun tipo especifico de expresion 
 public abstract class Expresion
 {
 
+    //las expresiones unarias estan formadas por un operador logico (!) o aritmetico (-) y una expression derecha.
     public class ExprUnaria : Expresion
 
     {
@@ -13,6 +15,7 @@ public abstract class Expresion
             Token = token;
             Derecha = derecha;
         }
+        //Este metodo se usa en el evaluador , comprueba segun el operador que la expresion a la derecha sea valida y evalua;
         public object VisitExprUnaria(object derecha)
         {
             if (Token.Type == TokenType.Resta)
@@ -39,6 +42,7 @@ public abstract class Expresion
         }
     }
 
+    //las expresiones de tipo binaria estan formadas por una expresion izquierda , un operador tanto logico como aritmetico y una expression derecha.
     public class ExprBinaria : Expresion
     {
         public Expresion Izquierda;
@@ -52,6 +56,7 @@ public abstract class Expresion
             Derecha = derecha;
         }
 
+        //este metodo se utiliza en el evaluador y segun el operador llama a otros metodos que combruebaan que la operacion sea valida
         public object VisitExprBinaria(object izquierda, object derecha)
         {
             if (Operador.Type == TokenType.IgualIgual)
@@ -348,6 +353,7 @@ public abstract class Expresion
         }
     }
 
+    //los literales son expresiones que contienen un object literal y un literal puede ser basicamente un numero o un string , etc
     public class ExprLiteral : Expresion
     {
         public object literal;
@@ -355,7 +361,7 @@ public abstract class Expresion
         {
             this.literal = literal;
         }
-
+        //este metodo se utiliza en el evaluador y devuelve el literal(valor) de mi expresion literal
         public object VisitExprLiteral(ExprLiteral expr)
         {
             return expr.literal;
@@ -363,6 +369,7 @@ public abstract class Expresion
 
     }
 
+    //las expresiones de asignacion e utilizan en este lenguaje para crear expresiones de la forma Token(variable) y el valor que se le asigna a esa variable
     public class ExprAsignar : Expresion
     {
         public Token Nombre;
@@ -375,6 +382,7 @@ public abstract class Expresion
         }
     }
 
+    //las expresiones variable estan formadas por un unico token que hace funcion de variable en el codigo
     public class ExprVariable : Expresion
     {
         public Token Nombre;
@@ -382,6 +390,9 @@ public abstract class Expresion
         {
             Nombre = nombre;
         }
+        //este metodo se utiliza en el evaluador dado un diccionario con las variables y sus valores y 
+        //la variable especifica que se necesita saber te devulve si la variable esta en el diccionario el valor que se le asigna.
+        //de no estar la variable en el diccionario retorna un error porque la variable no tiene un valor asignado.
         public object VisitExprVariable(Dictionary<object, object> asign, Token variable)
         {
             if (asign is null)
@@ -398,13 +409,15 @@ public abstract class Expresion
                         return asign[variable.Value];
                 }
             }
-            
+
             Evaluador.errores.Add(new ERROR(ERROR.ErrorType.SemanticError, " Variable " + variable.Value + " does not have a value assigned"));
             return null!;
 
         }
     }
 
+    //las llamadas de funcion tiene un string como nombre , una lista de expresiones como argumento y una funcion que 
+    //coincide con el nombre de esta.
     public class ExprLLamadaFuncion : Expresion
     {
         public string Identificador;
@@ -417,6 +430,9 @@ public abstract class Expresion
             this.funcion = funcion;
         }
 
+        //este metodo se usa en el evaluador y recibe como parametros un diccionario de variables con sus valores y la llamada funcion
+        //crea una lista donde a cada argumento en call.Argumento lo evalua y guarda sus valores como object en dicha lista.
+        //luego revisa cual es la funcion a la que se le hizo la llamada y en dependencia del nombre  se evalua con los valores de la lista creada.
         public object VisitExprLlamada(ExprLLamadaFuncion call, Dictionary<object, object> valor)
         {
             List<object> valores = new List<object>();
@@ -450,6 +466,8 @@ public abstract class Expresion
             }
         }
 
+        //si la funcion es de tipo sin comprueba que el count de la lista de argument sea 1 y luego evalua en dicho valor.
+        //si es diferente de 1 lanza un error pues sin solo recibe un argumento.
         public object Sin(List<object> argument)
         {
             if (argument.Count != 1)
@@ -472,6 +490,8 @@ public abstract class Expresion
 
         }
 
+        //si la funcion es de tipo cos comprueba que el count de la lista de argument sea 1 y luego evalua en dicho valor.
+        //si es diferente de 1 lanza un error pues cos solo recibe un argumento.
         public object Cos(List<object> argument)
         {
             if (argument.Count != 1)
@@ -494,6 +514,8 @@ public abstract class Expresion
 
         }
 
+        //si la funcion es de tipo sqrt comprueba que el count de la lista de argument sea 1 y luego evalua en dicho valor.
+        //si es diferente de 1 lanza un error pues sqrt solo recibe un argumento.
         public object Sqrt(List<object> argument)
         {
             if (argument.Count != 1)
@@ -516,6 +538,8 @@ public abstract class Expresion
 
         }
 
+        //si la funcion es de tipo slog comprueba que el count de la lista de argument sea 2 y luego evalua en dicho valor.
+        //si es diferente de 2 lanza un error pues log solo recibe un argumento.
         public object Log(List<object> argument)
         {
             if (argument.Count != 2)
@@ -537,6 +561,8 @@ public abstract class Expresion
 
         }
 
+        //si la funcion es de tipo print comprueba que el count de la lista de argument sea 1 y luego evalua en dicho valor.
+        //si es diferente de 1 lanza un error pues print solo recibe un argumento.
         public object Print(List<object> argument)
         {
             if (argument.Count != 1)
@@ -551,6 +577,10 @@ public abstract class Expresion
             }
         }
 
+        //por default si es una funcion declarada por el usuario entonces va a comprobar que la cantidad de parametros que recibe la funcion
+        //por definicion sea == a la cantidad de argumentos que tiene la llamada (si no es igual lanza un error )luego creara un 
+        //diccionario donde a cada parametro le asignara el valor del argumento en el mismo orden y evaluara
+        // el cuerpo de la funcion que no es mas que una expresion con dicho diccionario.
         public object VisitFuncion(List<object> valores, Funcion funcion)
         {
             Dictionary<object, object> value = new Dictionary<object, object>();
@@ -575,6 +605,8 @@ public abstract class Expresion
 
     }
 
+//esta clase se utiliza para crear nuevas funciones que seran declaradas por el usuario y las cuales tendran un nombre , una lista de parametros
+//que seran object y un cuerpo.
     public class Funcion : Expresion
     {
         public string Identificador;
@@ -589,6 +621,7 @@ public abstract class Expresion
 
     }
 
+    //las expresiones de tipo if estan formadas por una condicion de if , un cuerpo de if y un cuerpo de else.
     public class If : Expresion
     {
         public Expresion Condicion;
@@ -602,6 +635,7 @@ public abstract class Expresion
         }
     }
 
+//Las expresiones de tipo let_in estan conformadas por una lista de expresiones de asignacion y un inCuerpo que es una expresion.
     public class LetIn : Expresion
     {
         public List<ExprAsignar> LetCuerpo;

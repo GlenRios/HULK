@@ -1,4 +1,5 @@
 namespace HULK;
+    //en este enum se definen los tipos de tokens existentes
     public enum TokenType
     {
         //Tipos de Variables
